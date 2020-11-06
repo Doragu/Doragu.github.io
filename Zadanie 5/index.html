@@ -1,17 +1,17 @@
 <!doctype html>
 <html>
 <style>
-    .leftArrow {
+    #leftArrow {
         width: 200px;
         height: 200px;
     }
 
-    .space {
+    #space {
         width: 200px;
         height: 200px;
     }
 
-    .rightArrow {
+    #rightArrow {
         width: 200px;
         height: 200px;
     }
@@ -308,10 +308,12 @@
                 e = e || window.event;
 
                 if (e.keyCode == '37') { // left arrow
+                    e.preventDefault();
                     leftKeyDown = true
                     rightKeyDown = false
                 }
                 else if (e.keyCode == '39') { // right arrow
+                    e.preventDefault();
                     rightKeyDown = true
                     leftKeyDown = false
                 } else if (e.keyCode == '32') { //spacebar
@@ -322,7 +324,7 @@
 
             function stopMove(e) {
                 if (e.keyCode == '37') {
-                leftKeyDown = false;
+                    leftKeyDown = false;
                 }   
                 else if (e.keyCode == '39') {
                     rightKeyDown = false;
@@ -330,6 +332,24 @@
             }
 
             drive();
+
+            document.getElementById("leftArrow").addEventListener("touchstart", function() { 
+                leftKeyDown = true
+                rightKeyDown = false
+            });
+
+            document.getElementById("leftArrow").addEventListener("touchend", function() { 
+                leftKeyDown = false
+            });
+
+            document.getElementById("rightArrow").addEventListener("touchstart", function() { 
+                rightKeyDown = true
+                leftKeyDown = false
+            });
+
+            document.getElementById("rightArrow").addEventListener("touchend", function() { 
+                rightKeyDown = false
+            });
             
         });
     </script>
@@ -338,9 +358,9 @@
 
 <body>
     <canvas id="canvas" width=600 height=800></canvas><br>
-    <button class="leftArrow" type="button"></button> 
-    <button class="space" type="button"></button> 
-    <button class="rightArrow" type="button"></button> 
+    <button id="leftArrow" type="button"></button> 
+    <button id="space" type="button"></button> 
+    <button id="rightArrow" type="button"></button> 
     <p>Zielone klocki trzeba omijać, żółte łapać.</p>
     <p>Za ominięcie zielonego klocka dostaje się 1 punkt, za zestrzelenie 2, <br> a za złapanie żółtego 5 punktów.</p>
 </body>
