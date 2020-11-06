@@ -1,6 +1,27 @@
 <!doctype html>
 <html>
 <style>
+    html{
+        min-height:100%;/* make sure it is at least as tall as the viewport */
+        position:relative;
+    }
+
+    body {
+        height: 100%;
+        width: 100%;
+    }
+
+    .disable-dbl-tap-zoom {
+        touch-action: manipulation;
+        position:absolute;
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        overflow:hidden;
+        z-index:-1;
+    }
+
     #leftArrow {
         width: 200px;
         height: 200px;
@@ -361,7 +382,7 @@
 
 </head>
 
-<body>
+<body class="disable-dbl-tap-zoom">
     <canvas id="canvas" width=600 height=800></canvas><br>
     <button id="leftArrow" type="button"></button> 
     <button id="space" type="button"></button> 
