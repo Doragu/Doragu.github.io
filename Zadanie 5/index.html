@@ -318,7 +318,7 @@
                     leftKeyDown = false
                 } else if (e.keyCode == '32') { //spacebar
                     e.preventDefault();
-                    shootBall()
+                    shootBall();
                 }
             }
 
@@ -350,7 +350,12 @@
             document.getElementById("rightArrow").addEventListener("touchend", function() { 
                 rightKeyDown = false
             });
+
+            document.getElementById("space").addEventListener("touchstart", function() { 
+                shootBall();
+            });
             
+
         });
     </script>
 
