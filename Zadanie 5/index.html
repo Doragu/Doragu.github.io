@@ -327,16 +327,28 @@
                 }
 
                 e = e || window.event;
-
+                console.log(e.keyCode)
                 if (e.keyCode == '37') { // left arrow
                     e.preventDefault();
                     leftKeyDown = true
                     rightKeyDown = false
                 }
+                else if (e.keyCode == '38') { // up arrow
+                    e.preventDefault();
+                    moveSpeed += 1;
+                    console.log(moveSpeed)
+                }
                 else if (e.keyCode == '39') { // right arrow
                     e.preventDefault();
                     rightKeyDown = true
                     leftKeyDown = false
+                }
+                else if (e.keyCode == '40') { // down arrow
+                    e.preventDefault();
+                    if (moveSpeed > 5) {
+                        moveSpeed -= 1;
+                    }
+                    console.log(moveSpeed)
                 } else if (e.keyCode == '32') { //spacebar
                     e.preventDefault();
                     shootBall();
