@@ -237,11 +237,12 @@
                 e = e || window.event;
 
                 if (e.keyCode == '37') { // left arrow
-                        leftKeyDown = true
+                    leftKeyDown = true
+                    rightKeyDown = false
                 }
                 else if (e.keyCode == '39') { // right arrow
                     rightKeyDown = true
-                    
+                    leftKeyDown = false
                 }
             }
 
