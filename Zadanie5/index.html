@@ -1,5 +1,22 @@
 <!doctype html>
 <html>
+<style>
+    .leftArrow {
+        width: 200px;
+        height: 200px;
+    }
+
+    .space {
+        width: 200px;
+        height: 200px;
+    }
+
+    .rightArrow {
+        width: 200px;
+        height: 200px;
+    }
+</style>
+
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
@@ -319,7 +336,10 @@
 </head>
 
 <body>
-    <canvas id="canvas" width=600 height=800></canvas>
+    <canvas id="canvas" width=600 height=800></canvas><br>
+    <button class="leftArrow" type="button"></button> 
+    <button class="space" type="button"></button> 
+    <button class="rightArrow" type="button"></button> 
     <p>Zielone klocki trzeba omijać, żółte łapać.</p>
     <p>Za ominięcie zielonego klocka dostaje się 1 punkt, za zestrzelenie 2, <br> a za złapanie żółtego 5 punktów.</p>
 </body>
