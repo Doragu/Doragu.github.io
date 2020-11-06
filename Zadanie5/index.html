@@ -181,6 +181,19 @@
                 return false
             }
 
+            function checkIfTargetHitByBall(ballX, ballY) {
+                if (ballX - ballWidth < targetX + targetWidth && ballX + ballWidth > targetX - targetWidth && ballY <= targetY + targetWidth) {
+                    score += 1
+                    $("#score").html("Score: "+ score);
+
+                    console.log("hit")
+
+                    return true
+                }
+
+                return false
+            }
+
             function moveBall(x, y) {
                 y -= step
                 ctx.beginPath();
@@ -198,9 +211,9 @@
                 
                     setTimeout(function() {
                         requestAnimationFrame(function() {
-                            // if (checkIfTargetHit(x, y)) {
-                            //     return 
-                            // }
+                            if (checkIfTargetHitByBall(x, y)) {
+                                return 
+                            }
 
                             moveBall(x, y)
                         }
