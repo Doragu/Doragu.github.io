@@ -1,0 +1,43 @@
+<html>
+
+<body>
+  <canvas id="myCanvas">
+  </canvas>
+
+  <script>
+
+  function paintCircle(circleColor) {
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    if (canvas.height) {
+      canvas.height = 0;
+    }
+    canvas.width = window.innerWidth;
+    canvas.height = document.documentElement.scrollHeight;
+    var cW = canvas.width;
+    var cH = canvas.height;
+
+    ctx.beginPath();
+    ctx.fillStyle = circleColor || "blue";
+    ctx.arc(cW / 2, cH / 2, 50, 0, 2 * Math.PI, false);
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  var choice = 1;
+
+  var changeColor = setInterval(function() {
+    if (choice == 1){
+      paintCircle("green")
+      choice = 0;
+    } else {
+      paintCircle("blue")
+      choice = 1;
+    }
+  }, 1000)
+
+  </script> 
+
+</body>
+
+</html>

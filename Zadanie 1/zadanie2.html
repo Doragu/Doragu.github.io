@@ -1,0 +1,74 @@
+<html>
+
+<body>
+  <canvas id="myCanvas">
+  </canvas>
+
+  <script>
+
+  lerp = function(a,b,u) {
+    return (1-u) * a + u * b;
+  };
+
+  function fade(element, ctx, start, end, duration) {
+    var interval = 10;
+    var steps = duration/interval;
+    var step_u = 1.0/steps;
+    var u = 0.0;
+    var theInterval = setInterval(function(){
+      if (u >= 1.0) { 
+        clearInterval(theInterval) 
+      }
+      var r = parseInt(lerp(start.r, end.r, u));
+      var g = parseInt(lerp(start.g, end.g, u));
+      var b = parseInt(lerp(start.b, end.b, u));
+      var colorname = 'rgb('+r+','+g+','+b+')';
+      
+      var ctx = element.getContext("2d");
+
+      ctx.fillStyle = colorname;
+      ctx.fill();
+      u += step_u;
+    }, interval);
+  }
+
+  function paintCircle(canvas, ctx, circleColor) {
+    if (canvas.height) {
+      canvas.height = 0;
+    }
+    canvas.width = window.innerWidth;
+    canvas.height = document.documentElement.scrollHeight;
+    var cW = canvas.width;
+    var cH = canvas.height;
+
+    ctx.beginPath();
+    ctx.fillStyle = circleColor || "blue";
+    ctx.arc(cW / 2, cH / 2, 50, 0, 2 * Math.PI, false);
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  var canvas = document.getElementById("myCanvas");
+  var ctx = canvas.getContext("2d"); 
+  
+  paintCircle(canvas, ctx, 'rgb(0, 255 ,0)');
+  
+  green = {r: 0, g:255, b:0}; 
+  blue = {r: 0, g:0, b:255};  
+  var choice = 1;
+
+  var changeColor = setInterval(function() {
+    if (choice == 1){
+      fade(canvas, ctx, blue, green, 500); 
+      choice = 0;
+    } else {
+      fade(canvas, ctx, green, blue, 500); 
+      choice = 1;
+    }
+  }, 1000)
+
+  </script> 
+
+</body>
+
+</html>

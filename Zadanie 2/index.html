@@ -1,0 +1,84 @@
+<html>
+
+<body>
+    <canvas id="myCanvas">
+    </canvas>
+
+    <script>
+
+        function paintSteps() {
+            var ctx = canvas.getContext('2d');
+
+            ctx.beginPath();
+            ctx.moveTo((i - 1) * canvas.width * 0.15, cHStart);
+            ctx.lineTo((i - 1) * canvas.width * 0.15, cHStart - (i * cHStart * 0.10));
+            ctx.lineTo(i * canvas.width * 0.15, cHStart - (i * cHStart * 0.10));
+            ctx.lineTo(i * canvas.width * 0.15, cHStart);
+            ctx.fill();
+
+            if (i < 5 && ballMove == 0) {
+                i += 1
+                setTimeout(function() {requestAnimationFrame(paintSteps)}, 1000);
+            } else {
+                ballMove = 1
+
+                ctx.beginPath();
+                ctx.fillStyle = "white";
+                ctx.fillRect(startX - rad, startY - rad, rad * 2, rad * 2)
+                ctx.closePath()                    
+
+                if (state == 1) {
+                    startX -= 1
+                } else if (state == 2) {
+                    startX -= 1
+
+                    if (j > (rad / 2)) {
+                        curve = 3
+                    } 
+                    j += 1
+                    startY += curve
+                }
+
+                ctx.beginPath();
+                ctx.fillStyle = "blue";
+                ctx.arc(startX, startY, rad, 0, 2 * Math.PI);
+                ctx.fill()
+                
+                if (Math.abs(cHStart - (i * cHStart * 0.10) + rad - startY) < 3) {
+                    state = 1
+                    i -= 1
+                }
+                else if (parseInt(startX, 10) === parseInt((i - 1) * canvas.width * 0.15, 10)) {
+                    state = 2
+                    curve = 1
+                    j = 1
+                }
+
+                setTimeout(function() {requestAnimationFrame(paintSteps)}, 3);
+            }
+        }
+        
+
+        var canvas = document.getElementById("myCanvas");
+        canvas.width = window.innerWidth;
+        canvas.height = document.documentElement.scrollHeight;
+
+        var i = 1, j = 1;
+        var ballMove = 0;
+        var rad = 100
+        var cHStart = canvas.height - 100
+        var state = 1
+        var curve = 1
+
+        var startX = (5 * canvas.width * 0.15) - (canvas.width * 0.075)
+        var startY = cHStart - (5 * cHStart * 0.10) - rad
+        
+
+        paintSteps()
+
+    </script> 
+
+</body>
+
+</html>
+

@@ -1,0 +1,93 @@
+<html>
+
+<body>
+  <canvas id="myCanvas">
+  </canvas>
+
+  <script>
+
+  lerp = function(a,b,u) {
+    return (1-u) * a + u * b;
+  };
+
+  function paintCircle(circleColor) {
+    if (canvas.height) {
+      canvas.height = 0;
+    }
+    canvas.width = window.innerWidth;
+    canvas.height = document.documentElement.scrollHeight;
+    var cW = canvas.width;
+    var cH = canvas.height;
+
+    ctx.beginPath();
+    ctx.fillStyle = circleColor || "blue";
+    ctx.arc(cW / 2, cH / 2, 50, 0, 2 * Math.PI, false);
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  function fade(start, end, duration) {
+    var interval = 10;
+    var steps = duration/interval;
+    var step_u = 1.0/steps;
+    var u = 0.0;
+    var theInterval = setInterval(function(){
+      if (u >= 1.0) { 
+        clearInterval(theInterval) 
+      }
+      var r = parseInt(lerp(start.r, end.r, u));
+      var g = parseInt(lerp(start.g, end.g, u));
+      var b = parseInt(lerp(start.b, end.b, u));
+      colorname = 'rgb('+r+','+g+','+b+')';
+      
+      u += step_u;
+    }, interval);
+  }
+
+  function draw() {
+    if (y <= 0 || y >= canvas.height) {
+        direction = direction * -1;
+    }
+    if (direction == 1) {
+        y -= 2;
+    } else {
+        y += 2;
+    }
+    ctx.beginPath();
+    ctx.arc(x, y, 50, 0, 2 * Math.PI);
+    ctx.fillStyle = colorname;
+    ctx.fill();
+
+    ctx.fillStyle = "rgba(255,255,255,0.5)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    requestAnimationFrame(draw);
+  }
+
+  var canvas = document.getElementById("myCanvas");
+  var ctx = canvas.getContext("2d"); 
+  
+  paintCircle('rgb(0, 255 ,0)');
+  
+  var colorname = {r: 0, g:255, b:0};
+  green = {r: 0, g:255, b:0}; 
+  blue = {r: 0, g:0, b:255};  
+  var x = canvas.width/2, y = canvas.height/2;
+  var choice = 1, direction = 1;
+
+  var changeColor = setInterval(function() {
+    if (choice == 1){
+      fade(blue, green, 1000); 
+      choice = choice * -1;
+    } else {
+      fade(green, blue, 1000); 
+      choice = choice * -1;
+    }
+    draw()
+  }, 1000)
+
+  </script> 
+
+</body>
+
+</html>
+

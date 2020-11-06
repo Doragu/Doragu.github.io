@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        canvas {
+            border:1px solid black;
+        }
+
+        #score {
+            font-size: 30px;
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(function(){
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+
+            var canvasOffset = $("#canvas").offset();
+            var offsetX = canvasOffset.left;
+            var offsetY = canvasOffset.top;
+
+            var startX = (canvas.width / 2) + offsetX
+            var startY = canvas.height - 150
+            var rectWidth = 100
+            var step = 20
+
+            var targetX = 0;
+            var targetY = 100;
+            var targetWidth = 50;
+            var targetHit = 0;
+
+            var score = 0;
+
+            function moveAndDrawRect(moveX) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+
+                startX += moveX
+
+                ctx.fillStyle = "blue";
+                ctx.rect(startX, startY, 100, 100);
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            function moveBall(x, y) {
+                y -= step
+                ctx.beginPath();
+                ctx.fillStyle = "white";
+                ctx.arc(x, y + step, ballWidth + 1, 0, 2 * Math.PI);
+                ctx.fill()
+                ctx.closePath();
+
+                if (y > offsetY) {
+                    ctx.beginPath();
+                    ctx.fillStyle = "red";
+                    ctx.arc(x, y, ballWidth, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.stroke();
+                
+                    setTimeout(function() {
+                        requestAnimationFrame(function() {
+                            if (checkIfTargetHit(x, y)) {
+                                return 
+                            }
+
+                            moveBall(x, y)
+                        }
+                    )}, 1);
+                }
+            }
+
+            function shootBall() {
+                ballWidth = 20
+                ballX = startX + (rectWidth / 2)
+                ballY = startY - ballWidth - 2
+
+                ctx.beginPath();
+
+                ctx.fillStyle = "red";
+                ctx.arc(ballX, ballY, ballWidth, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+
+                moveBall(ballX, ballY)
+            }
+
+            function drawTarget() {
+                ctx.beginPath();
+
+                if (targetHit == 0) {
+                    targetX = Math.floor(Math.random() * 924) + offsetX;  
+                    targetHit = 1;
+                }
+
+                ctx.fillStyle = "green";
+                ctx.arc(targetX, targetY, targetWidth, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+
+                requestAnimationFrame(drawTarget)
+            }
+
+            function clearTarget() {
+                ctx.beginPath();
+                ctx.fillStyle = "white";
+                ctx.fillRect(targetX - targetWidth - 1, targetY - targetWidth - 1, targetWidth * 2 + 2, targetWidth * 2 + 2);
+                ctx.closePath();
+
+                targetHit = 0;
+            }
+
+            function checkIfTargetHit(ballX, ballY) {
+                if (ballX - ballWidth < targetX + targetWidth && ballX + ballWidth > targetX - targetWidth && ballY <= targetY + targetWidth) {
+                    clearTarget()
+                    score += 1
+                    $("#score").html("Score: "+ score);
+
+                    return true
+                }
+
+                return false
+            }
+
+            document.onkeydown = checkKey;
+
+            function checkKey(e) {
+                e = e || window.event;
+
+                if (e.keyCode == '37') { //left arrow
+                    if (startX > offsetX) {
+                        moveAndDrawRect(-step);
+                    }
+                }
+                else if (e.keyCode == '39') { //right arrow
+                    if (startX < (canvas.width - rectWidth)) {
+                        moveAndDrawRect(step);
+                    }
+                } else if (e.keyCode == '32') { //spacebar
+                    shootBall()
+                }
+
+            }
+
+            moveAndDrawRect(0);
+            drawTarget()
+        });
+    </script>
+
+</head>
+
+<body>
+    <canvas id="canvas" width=1024 height=768></canvas>
+    <p id="score">Score: 0</p>
+</body>
+
+</html>

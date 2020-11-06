@@ -1,0 +1,251 @@
+<!doctype html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(function(){
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+
+            var canvasOffset = $("#canvas").offset();
+            var offsetX = canvasOffset.left;
+            var offsetY = canvasOffset.top;
+            var canvasWidth = 600;
+            var canvasHeight = 800;
+
+            var carX = offsetX + 150;
+            var carY = canvas.height - 150;
+            var carWidth = 100;
+            var wheelWidth = 15
+
+            var lineWidth = 10;
+            var lineHeight = 100;
+
+            var moveLine = 0
+            var moveSpeed = 4
+
+            var targetX = 0
+            var targetY = 0
+            var targetWidth = 100
+            var isTarget = 0
+
+            var collectableX = 0
+            var collectableY = 0
+            var collectableWidth = 50
+            var isCollectable = 0
+
+            var step = 50;
+            var score = 0;
+
+
+            function drawRoad(){
+                ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+                ctx.fillStyle = "grey";
+                ctx.rect(offsetX, offsetY, canvasWidth, canvasHeight);
+                ctx.fill();
+            }
+
+            function drawOneWheel(x, y) {
+                ctx.beginPath();
+                ctx.fillStyle = "red";
+                ctx.arc(x, y, wheelWidth, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            function drawWheels() {
+                drawOneWheel(carX, carY + 20)
+                drawOneWheel(carX, carY + 80)
+                drawOneWheel(carX + carWidth, carY + 20)
+                drawOneWheel(carX + carWidth, carY + 80)
+            }
+
+            function moveAndDrawCar(moveX) {
+                carX += moveX
+                
+                drawWheels()
+
+                ctx.beginPath();
+                ctx.fillStyle = "blue";
+                ctx.rect(carX, carY, carWidth, carWidth);
+                ctx.fill();
+                ctx.stroke();
+
+            }
+
+            function drawCenterLine(x, y) {
+                ctx.beginPath();
+                ctx.fillStyle = "white";
+                ctx.rect(x, y, lineWidth, lineHeight);
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            function drawSideLine(x, y) {
+                ctx.beginPath();
+                ctx.fillStyle = "white";
+                ctx.rect(x, y, lineWidth, lineHeight / 2);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.fillStyle = "red";
+                ctx.rect(x, y + lineHeight / 2, lineWidth, lineHeight / 2);
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            function initTarget() {
+                targetX = Math.floor(Math.random() * 500) + offsetX;  
+                targetY = 0;
+                
+                score += 1;
+                isTarget = 1;
+            }
+
+            function drawTarget() {
+                if (isTarget == 0) {
+                    initTarget()
+                }
+
+                ctx.beginPath();
+                ctx.fillStyle = "green";
+                ctx.rect(targetX, targetY, targetWidth, targetWidth);
+                ctx.fill();
+                ctx.stroke();
+
+                targetY += moveSpeed - 0.1
+                if (targetY >= offsetY + canvasHeight) {
+                    isTarget = 0
+                }
+            }
+
+            function initCollectable() {
+                do {
+                    collectableX = Math.floor(Math.random() * 500) + offsetX;
+                } while (collectableX <= targetX + targetWidth && collectableX + collectableWidth >= targetX) 
+                
+                collectableY = 0;
+
+                isCollectable = 1
+            }
+
+            function drawCollectable() {
+                if (isCollectable == 0) {
+                    initCollectable()
+                }
+
+                ctx.beginPath();
+                ctx.fillStyle = "yellow";
+                ctx.rect(collectableX, collectableY, collectableWidth, collectableWidth);
+                ctx.fill();
+                ctx.stroke();
+
+                collectableY += moveSpeed - 0.1
+                if (collectableY >= offsetY + canvasHeight) {
+                    isCollectable = 0
+                }
+            }
+
+            function drawLines() {
+                for (i = moveLine; i < offsetY + canvasHeight; i += 150) {
+                    drawSideLine(offsetX + 5, i);
+                    drawCenterLine(offsetX + (canvasWidth / 2) - 5, i);
+                    drawSideLine(offsetX + canvasWidth - 25, i);
+                }
+            }
+
+            function isTargetHit() {
+                if (carX - wheelWidth < targetX + targetWidth && 
+                    carX + carWidth + wheelWidth > targetX && 
+                    carY <= targetY + targetWidth - moveSpeed && 
+                    carY + carWidth >= targetY) {
+                    return true
+                }
+
+                return false
+            }
+
+            function isCollectableHit() {
+                if (carX - wheelWidth < collectableX + collectableWidth && 
+                    carX + carWidth + wheelWidth > collectableX && 
+                    carY <= collectableY + collectableWidth - moveSpeed && 
+                    carY + carWidth >= collectableY) {
+                    return true
+                }
+
+                return false
+            }
+
+            function drawScore() {
+                ctx.beginPath();
+                ctx.font = "18px Arial";
+                ctx.fillStyle = "black" 
+                ctx.fillText("Score: " + score , 10, 30);
+                ctx.stroke();
+            }
+
+            function drive() {
+                if (moveLine > 150) {
+                    moveLine = 0
+                    moveSpeed += 0.1
+                }
+                moveLine += moveSpeed
+
+                drawRoad();
+                drawLines();
+
+                drawTarget();
+                drawCollectable();
+
+                moveAndDrawCar(0);
+                drawScore();
+
+                if (isTargetHit()) {
+                    return
+                }
+
+                if (isCollectableHit()) {
+                    initCollectable()
+                    score += 5;
+                }
+
+                requestAnimationFrame(drive);
+            }
+
+            document.onkeydown = checkKey;
+
+            function checkKey(e) {
+                if (isTargetHit()) {
+                    return
+                }
+
+                e = e || window.event;
+
+                if (e.keyCode == '37') { // left arrow
+                    if (carX > offsetX) {
+                        moveAndDrawCar(-step);
+                    }
+                }
+                else if (e.keyCode == '39') { // right arrow
+                    if (carX < (canvas.width - carWidth)) {
+                        moveAndDrawCar(step);
+                    }
+                }
+            }
+
+            drive();
+            
+        });
+    </script>
+
+</head>
+
+<body>
+    <canvas id="canvas" width=600 height=800></canvas>
+    <p>Zielone klocki trzeba omijać, żółte łapać.</p>
+    <p>Za ominięcie zielonego klocka dostaje się 1 punkt, a za złapanie żółtego 5 punktów.</p>
+</body>
+
+</html>
