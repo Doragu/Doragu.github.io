@@ -182,11 +182,10 @@
             }
 
             function checkIfTargetHitByBall(ballX, ballY) {
-                if (ballX - ballWidth < targetX + targetWidth && ballX + ballWidth > targetX - targetWidth && ballY <= targetY + targetWidth) {
+                if (ballX - ballWidth < targetX + targetWidth && ballX + ballWidth > targetX && ballY <= targetY + targetWidth) {
                     score += 1
+                    isTarget = 0;
                     $("#score").html("Score: "+ score);
-
-                    console.log("hit")
 
                     return true
                 }
