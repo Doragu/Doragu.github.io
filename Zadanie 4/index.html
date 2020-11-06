@@ -7,6 +7,9 @@
             var canvas = document.getElementById("canvas");
             var ctx = canvas.getContext("2d");
 
+            var leftKeyDown = false;
+            var rightKeyDown = false;
+
             var canvasOffset = $("#canvas").offset();
             var offsetX = canvasOffset.left;
             var offsetY = canvasOffset.top;
@@ -211,10 +214,21 @@
                     score += 5;
                 }
 
+                if (leftKeyDown) {
+                    if (carX > offsetX) {
+                        moveAndDrawCar(-step); 
+                    }
+                } else if (rightKeyDown) {
+                    if (carX < (canvas.width - carWidth)) {
+                        moveAndDrawCar(step);
+                    }
+                }
                 requestAnimationFrame(drive);
             }
 
+            console.log(document.onkeydown)
             document.onkeydown = checkKey;
+            document.onkeyup = stopMove
 
             function checkKey(e) {
                 if (isTargetHit()) {
@@ -224,14 +238,21 @@
                 e = e || window.event;
 
                 if (e.keyCode == '37') { // left arrow
-                    if (carX > offsetX) {
-                        moveAndDrawCar(-step);
-                    }
+                        leftKeyDown = true
                 }
                 else if (e.keyCode == '39') { // right arrow
-                    if (carX < (canvas.width - carWidth)) {
-                        moveAndDrawCar(step);
-                    }
+                    rightKeyDown = true
+                    
+                }
+                console.log(e)
+            }
+
+            function stopMove(e) {
+                if (e.keyCode == '37') {
+                leftKeyDown = false;
+                }   
+                else if (e.keyCode == '39') {
+                    rightKeyDown = false;
                 }
             }
 
