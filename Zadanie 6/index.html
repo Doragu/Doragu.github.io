@@ -15,7 +15,26 @@
         touch-action: manipulation;
     }
 
+    #buttons {
+        width: 1005px;
+    }
+
+    #frontArrow {
+        margin-left: 405px;
+        margin-bottom: 3px;
+        width: 200px;
+        height: 200px;
+    }
+
+    #bottomArrow {
+        margin-left: 405px;
+        margin-top: 3px;
+        width: 200px;
+        height: 200px;
+    }
+
     #leftArrow {
+        margin-left: 200px;
         width: 200px;
         height: 200px;
     }
@@ -40,14 +59,15 @@
 
             var leftKeyDown = false;
             var rightKeyDown = false;
-
+            var speedUp = false;
+            var speedDown = false;
 
             var canvasOffset = $("#canvas").offset();
             canvasOffset.left = 200;
             var offsetX = canvasOffset.left;
             var offsetY = canvasOffset.top - 200;
-            var canvasWidth = 1000;
-            var canvasHeight = 800;
+            var canvasWidth = 2000;
+            var canvasHeight = 1800;
 
             var roadWidth = 600
             var roadHeight = 1200;
@@ -316,6 +336,13 @@
                     moveLine = 0
                     moveSpeed += 0.1
                 }
+                if (speedUp && moveSpeed <= 20) {
+                    moveSpeed += 0.2;
+                }
+                if (speedDown && moveSpeed >= 5) {
+                    moveSpeed -= 0.2;
+                }
+
                 moveLine += moveSpeed
 
                 drawRoad();
@@ -366,7 +393,7 @@
                 }
                 else if (e.keyCode == '38') { // up arrow
                     e.preventDefault();
-                    moveSpeed += 1;
+                    speedUp = true;
                 }
                 else if (e.keyCode == '39') { // right arrow
                     e.preventDefault();
@@ -375,9 +402,7 @@
                 }
                 else if (e.keyCode == '40') { // down arrow
                     e.preventDefault();
-                    if (moveSpeed > 5) {
-                        moveSpeed -= 1;
-                    }
+                    speedDown = true;
                 } else if (e.keyCode == '32') { //spacebar
                     e.preventDefault();
                     shootBall();
@@ -387,13 +412,33 @@
             function stopMove(e) {
                 if (e.keyCode == '37') {
                     leftKeyDown = false;
-                }   
+                }  else if (e.keyCode == '38') { // up arrow
+                    speedUp = false;
+                } 
                 else if (e.keyCode == '39') {
                     rightKeyDown = false;
+                } else if (e.keyCode == '40') { // down arrow
+                    speedDown = false;
                 }
             }
 
             drive();
+
+            document.getElementById("frontArrow").addEventListener("touchstart", function() { 
+                speedUp = true;
+            });
+
+            document.getElementById("frontArrow").addEventListener("touchend", function() { 
+                speedUp = false;
+            });
+
+            document.getElementById("bottomArrow").addEventListener("touchstart", function() { 
+                speedDown = true;
+            });
+
+            document.getElementById("bottomArrow").addEventListener("touchend", function() { 
+                speedDown = false;
+            });
 
             document.getElementById("leftArrow").addEventListener("touchstart", function() { 
                 leftKeyDown = true
@@ -425,9 +470,13 @@
 
 <body class="disable-dbl-tap-zoom">
     <canvas id="canvas" width=1000 height=800></canvas><br>
-    <button id="leftArrow" type="button"></button> 
-    <button id="space" type="button"></button> 
-    <button id="rightArrow" type="button"></button> 
+    <div id="buttons">
+        <button id="frontArrow" type="button"></button> 
+        <button id="leftArrow" type="button"></button> 
+        <button id="space" type="button"></button> 
+        <button id="rightArrow" type="button"></button> 
+        <button id="bottomArrow" type="button"></button> 
+    </div>
     <p>Zielone klocki trzeba omijać, żółte łapać.</p>
     <p>Za ominięcie zielonego klocka dostaje się 1 punkt, za zestrzelenie 2, <br> a za złapanie żółtego 5 punktów.</p>
 </body>
