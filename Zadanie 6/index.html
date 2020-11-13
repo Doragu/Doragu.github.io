@@ -41,11 +41,16 @@
             var leftKeyDown = false;
             var rightKeyDown = false;
 
+
             var canvasOffset = $("#canvas").offset();
+            canvasOffset.left = 200;
             var offsetX = canvasOffset.left;
-            var offsetY = canvasOffset.top;
-            var canvasWidth = 600;
+            var offsetY = canvasOffset.top - 200;
+            var canvasWidth = 1000;
             var canvasHeight = 800;
+
+            var roadWidth = 600
+            var roadHeight = 1200;
 
             var carX = offsetX + 150;
             var carY = canvas.height - 150;
@@ -69,6 +74,9 @@
             var isCollectable = 0
 
             var step = 15;
+            var rotate = 1;
+            var rotateCounter = 0;
+            var turn = 0;
             var score = 0;
 
 
@@ -76,7 +84,7 @@
                 ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
                 ctx.fillStyle = "grey";
-                ctx.rect(offsetX, offsetY, canvasWidth, canvasHeight);
+                ctx.rect(offsetX, offsetY, roadWidth, roadHeight);
                 ctx.fill();
             }
 
@@ -114,6 +122,7 @@
                 ctx.rect(x, y, lineWidth, lineHeight);
                 ctx.fill();
                 ctx.stroke();
+                ctx.closePath()
             }
 
             function drawSideLine(x, y) {
@@ -132,7 +141,7 @@
 
             function initTarget() {
                 targetX = Math.floor(Math.random() * 500) + offsetX;  
-                targetY = 0;
+                targetY = offsetY;
                 
                 score += 1;
                 isTarget = 1;
@@ -150,7 +159,7 @@
                 ctx.stroke();
 
                 targetY += moveSpeed - 0.1
-                if (targetY >= offsetY + canvasHeight) {
+                if (targetY >= offsetY + roadHeight) {
                     isTarget = 0
                 }
             }
@@ -160,7 +169,7 @@
                     collectableX = Math.floor(Math.random() * 500) + offsetX;
                 } while (collectableX <= targetX + targetWidth && collectableX + collectableWidth >= targetX) 
                 
-                collectableY = 0;
+                collectableY = offsetY;
 
                 isCollectable = 1
             }
@@ -177,16 +186,16 @@
                 ctx.stroke();
 
                 collectableY += moveSpeed - 0.1
-                if (collectableY >= offsetY + canvasHeight) {
+                if (collectableY >= offsetY + roadHeight) {
                     isCollectable = 0
                 }
             }
 
             function drawLines() {
-                for (i = moveLine; i < offsetY + canvasHeight; i += 150) {
+                for (i = moveLine + offsetY; i < offsetY + roadHeight; i += 150) {
                     drawSideLine(offsetX + 5, i);
-                    drawCenterLine(offsetX + (canvasWidth / 2) - 5, i);
-                    drawSideLine(offsetX + canvasWidth - 25, i);
+                    drawCenterLine(offsetX + (roadWidth / 2) - 5, i);
+                    drawSideLine(offsetX + roadWidth - 25, i);
                 }
             }
 
@@ -266,11 +275,39 @@
                 moveBall(ballX, ballY)
             }
 
+            function rotateRoad() {
+                angle = 0.2
+
+                if (rotateCounter >= 10) {
+                    if (turn == 0) {
+                        if (Math.random() > 0.5) {
+                            turn = 1
+                        } else {
+                            turn = -1;
+                        }
+                    }
+
+                    if (rotate < 20) {    
+                        ctx.translate(500, 400);
+                        ctx.rotate(turn * angle * Math.PI / 180);
+                        ctx.translate(-500, -400);
+
+                        rotate += angle;
+                    } else {
+                        rotate = 0;
+                        rotateCounter = 0;
+                        turn = 0;
+                    }
+                } else {
+                    rotateCounter += 0.1;
+                }
+            }
+
             function drawScore() {
                 ctx.beginPath();
                 ctx.font = "18px Arial";
                 ctx.fillStyle = "black" 
-                ctx.fillText("Score: " + score , 10, 30);
+                ctx.fillText("Score: " + score , carX, carY + carWidth + 18);
                 ctx.stroke();
             }
 
@@ -286,8 +323,10 @@
 
                 drawTarget();
                 drawCollectable();
-
+                
                 moveAndDrawCar(0);
+
+                rotateRoad();
                 drawScore();
 
                 if (isTargetHit()) {
@@ -304,7 +343,7 @@
                         moveAndDrawCar(-step); 
                     }
                 } else if (rightKeyDown) {
-                    if (carX < (canvas.width - carWidth)) {
+                    if (carX < (offsetX + roadWidth - carWidth - wheelWidth)) {
                         moveAndDrawCar(step);
                     }
                 }
@@ -320,7 +359,6 @@
                 }
 
                 e = e || window.event;
-                console.log(e.keyCode)
                 if (e.keyCode == '37') { // left arrow
                     e.preventDefault();
                     leftKeyDown = true
@@ -329,7 +367,6 @@
                 else if (e.keyCode == '38') { // up arrow
                     e.preventDefault();
                     moveSpeed += 1;
-                    console.log(moveSpeed)
                 }
                 else if (e.keyCode == '39') { // right arrow
                     e.preventDefault();
@@ -341,7 +378,6 @@
                     if (moveSpeed > 5) {
                         moveSpeed -= 1;
                     }
-                    console.log(moveSpeed)
                 } else if (e.keyCode == '32') { //spacebar
                     e.preventDefault();
                     shootBall();
@@ -388,7 +424,7 @@
 </head>
 
 <body class="disable-dbl-tap-zoom">
-    <canvas id="canvas" width=600 height=800></canvas><br>
+    <canvas id="canvas" width=1000 height=800></canvas><br>
     <button id="leftArrow" type="button"></button> 
     <button id="space" type="button"></button> 
     <button id="rightArrow" type="button"></button> 
