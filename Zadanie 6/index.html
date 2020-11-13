@@ -163,7 +163,7 @@
                 targetX = Math.floor(Math.random() * 500) + offsetX;  
                 targetY = offsetY;
                 
-                score += 1;
+                score += 1 + (moveSpeed * (moveSpeed / 100));
                 isTarget = 1;
             }
 
@@ -243,9 +243,9 @@
 
             function checkIfTargetHitByBall(ballX, ballY) {
                 if (ballX - ballWidth < targetX + targetWidth && ballX + ballWidth > targetX && ballY <= targetY + targetWidth) {
-                    score += 1
+                    score += 1 + (moveSpeed * (moveSpeed / 100))
                     isTarget = 0;
-                    $("#score").html("Score: "+ score);
+                    $("#score").html("Score: "+ Math.floor(score));
 
                     return true
                 }
@@ -327,7 +327,7 @@
                 ctx.beginPath();
                 ctx.font = "18px Arial";
                 ctx.fillStyle = "black" 
-                ctx.fillText("Score: " + score , carX, carY + carWidth + 18);
+                ctx.fillText("Score: " + Math.floor(score) , carX, carY + carWidth + 18);
                 ctx.stroke();
             }
 
@@ -362,7 +362,7 @@
 
                 if (isCollectableHit()) {
                     initCollectable()
-                    score += 5;
+                    score += 5  + (moveSpeed * (moveSpeed / 100));
                 }
 
                 if (leftKeyDown) {
@@ -478,7 +478,8 @@
         <button id="bottomArrow" type="button"></button> 
     </div>
     <p>Zielone klocki trzeba omijać, żółte łapać.</p>
-    <p>Za ominięcie zielonego klocka dostaje się 1 punkt, za zestrzelenie 2, <br> a za złapanie żółtego 5 punktów.</p>
+    <p>Za ominięcie zielonego klocka dostaje się 1 punkt, za zestrzelenie 2, a za złapanie żółtego 5 punktów.</p>
+    <p>Punkty są też odpowiednio mnożone przez prędkość.</p>
 </body>
 
 </html>
