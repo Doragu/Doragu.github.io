@@ -65,12 +65,12 @@
             var canvasOffset = $("#canvas").offset();
             canvasOffset.left = 200;
             var offsetX = canvasOffset.left;
-            var offsetY = canvasOffset.top - 200;
+            var offsetY = canvasOffset.top - 300;
             var canvasWidth = 2000;
             var canvasHeight = 1800;
 
             var roadWidth = 600
-            var roadHeight = 1200;
+            var roadHeight = 1400;
 
             var carX = offsetX + 150;
             var carY = canvas.height - 150;
@@ -101,7 +101,7 @@
 
 
             function drawRoad(){
-                ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+                ctx.clearRect(offsetY, offsetY, canvasWidth, canvasHeight);
 
                 ctx.fillStyle = "grey";
                 ctx.rect(offsetX, offsetY, roadWidth, roadHeight);
@@ -345,6 +345,7 @@
 
                 moveLine += moveSpeed
 
+                rotateRoad();
                 drawRoad();
                 drawLines();
 
@@ -353,7 +354,6 @@
                 
                 moveAndDrawCar(0);
 
-                rotateRoad();
                 drawScore();
 
                 if (isTargetHit()) {
