@@ -53,7 +53,7 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        $(function(){
+        $(function() {
             var canvas = document.getElementById("canvas");
             var ctx = canvas.getContext("2d");
 
@@ -62,6 +62,7 @@
             var speedUp = false;
             var speedDown = false;
 
+            // var $ = function(query) {​​​​​ return document.querySelector(query); }
             var canvasOffset = $("#canvas").offset();
             canvasOffset.left = 200;
             var offsetX = canvasOffset.left;
@@ -93,7 +94,7 @@
             var collectableWidth = 50
             var isCollectable = 0
 
-            var step = 15;
+            var step = 22;
             var rotate = 1;
             var rotateCounter = 0;
             var turn = 0;
@@ -461,8 +462,6 @@
             document.getElementById("space").addEventListener("touchstart", function() { 
                 shootBall();
             });
-            
-
         });
     </script>
 
