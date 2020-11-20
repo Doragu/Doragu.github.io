@@ -2,18 +2,14 @@
 <html>
 <style>
     html{
-        min-height:100%;/* make sure it is at least as tall as the viewport */
-        position:relative;
+        min-height: 100%;/* make sure it is at least as tall as the viewport */
+        position: relative;
     }
 
     body {
         height: 100%;
         width: 100%;
     }
-
-    /* #canvas {
-        padding-left: 200px;
-    } */
 
     .disable-dbl-tap-zoom {
         touch-action: manipulation;
@@ -59,7 +55,7 @@
 </head>
 
 <body class="disable-dbl-tap-zoom">
-    <canvas id="canvas" width=1000 height=800></canvas><br>
+    <canvas id="canvas" width=1000 height=800 shadowOffsetX=200></canvas><br>
     <div id="buttons">
         <button id="frontArrow" type="button"></button> 
         <button id="leftArrow" type="button"></button> 
@@ -270,10 +266,10 @@
         function rotateRoad() {
             angle = 0.2
 
-            if (rotateCounter >= 10) {
+            if (rotateCounter >= 20) {
                 if (turn == 0) {
                     if (Math.random() > 0.5) {
-                        turn = 1
+                        turn = -1
                     } else {
                         turn = -1;
                     }
@@ -432,6 +428,7 @@
             shootBall();
         });
 
+
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
 
@@ -441,13 +438,13 @@
         var speedDown = false;
 
         var canvasOffset = canvas.getBoundingClientRect();
-        var offsetX = canvasOffset.left;
+        var offsetX = canvasOffset.left + 220;
         var offsetY = canvasOffset.top - 300;
         var canvasWidth = 2000;
         var canvasHeight = 1800;
 
         var roadWidth = 600
-        var roadHeight = 1400;
+        var roadHeight = 1500;
 
         var carX = offsetX + 150;
         var carY = canvas.height - 150;
