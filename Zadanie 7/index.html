@@ -362,10 +362,25 @@
             }
         }
 
+        function handleOrientation(event) {
+            var absolute = event.absolute;
+            var alpha = event.alpha;
+            var beta = event.beta;
+            var gamma = event.gamma;
+
+            console.log(absolute);
+            console.log(alpha);
+            console.log(beta);
+            console.log(gamma);
+            
+            moveAndDrawCar(-step);
+        }
+
         document.getElementById("space").addEventListener("touchstart", function() { 
             shootBall();
         });
 
+        window.addEventListener("deviceorientation", handleOrientation);
 
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
@@ -410,6 +425,8 @@
         var rotateCounter = 0;
         var turn = 0;
         var score = 0;
+
+
 
         drive();
 
