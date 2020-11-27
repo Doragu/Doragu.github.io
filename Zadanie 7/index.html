@@ -363,24 +363,29 @@
         }
 
         function handleOrientation(event) {
-            var absolute = event.absolute;
-            var alpha = event.alpha;
-            var beta = event.beta;
-            var gamma = event.gamma;
+            var x = event.acceleration.x;
+            var y = event.acceleration.y;
+            var z = event.acceleration.z;
 
-            console.log(absolute);
-            console.log(alpha);
-            console.log(beta);
-            console.log(gamma);
+            console.log(x);
+            console.log(y);
+            console.log(z);
             
-            moveAndDrawCar(-step);
+            // moveAndDrawCar(-step);
         }
 
-        document.getElementById("space").addEventListener("touchstart", function() { 
-            shootBall();
-        });
+        // window.addEventListener("deviceorientation", handleOrientation);
 
-        window.addEventListener("deviceorientation", handleOrientation);
+        if (window.DeviceMotionEvent) {
+            window.addEventListener('devicemotion', handleOrientation);
+            console.log("Supported!");
+        } else {
+            console.log("NOT Supported!");
+        }
+
+        // document.getElementById("space").addEventListener("touchstart", function() { 
+        //     shootBall();
+        // });
 
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
@@ -425,8 +430,6 @@
         var rotateCounter = 0;
         var turn = 0;
         var score = 0;
-
-
 
         drive();
 
