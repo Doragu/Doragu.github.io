@@ -363,9 +363,6 @@
         }
 
         function handleOrientation(event) {
-            console.log("Acceleration along the X-axis " + event.gamma);
-            console.log("Acceleration along the Y-axis " + event.beta);
-
             if (event.gamma < -8) {
                 leftKeyDown = true
             } else if (event.gamma > 8) {
