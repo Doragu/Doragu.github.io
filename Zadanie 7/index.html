@@ -369,15 +369,23 @@
             console.log("Acceleration along the Y-axis " + acl.y);
             console.log("Acceleration along the Z-axis " + acl.z);
 
-            if (-4.0 > acl.x) {
+            if (acl.x < -3.0) {
                 rightKeyDown = true
-            } else if (4.0 < acl.x) {
+            } else if (acl.x > 3.0) {
                 leftKeyDown = true
             } else {
                 leftKeyDown = false
                 rightKeyDown = false
             }
-            
+
+            if (acl.y > 3.0) {
+                speedDown = true
+            } else if (acl.y < -3.0) {
+                speedUp = true;
+            } else {
+                speedUp = false;
+                speedDown = false;
+            }
         });
 
         acl.start();
