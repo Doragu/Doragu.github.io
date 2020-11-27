@@ -362,27 +362,24 @@
             }
         }
 
-        function handleOrientation(event) {
-            var x = event.acceleration.x;
-            var y = event.acceleration.y;
-            var z = event.acceleration.z;
+        let acl = new Accelerometer({frequency: 60});
 
-            console.log(x);
-            console.log(y);
-            console.log(z);
+        var initX = acl.x;
+
+        acl.addEventListener('reading', () => {
+            console.log("Acceleration along the X-axis " + acl.x);
+            console.log("Acceleration along the Y-axis " + acl.y);
+            console.log("Acceleration along the Z-axis " + acl.z);
+
+            if (initX < acl.x) {
+                moveAndDrawCar(step)
+            } else if (initX > acl.x) {
+                moveAndDrawCar(-step)
+            }
             
-            // moveAndDrawCar(-step);
-        }
+        });
 
-        // window.addEventListener("deviceorientation", handleOrientation);
-
-        if (window.DeviceMotionEvent) {
-            window.addEventListener('devicemotion', handleOrientation);
-            console.log("Supported!");
-        } else {
-            console.log("NOT Supported!");
-        }
-
+        acl.start();
         // document.getElementById("space").addEventListener("touchstart", function() { 
         //     shootBall();
         // });
