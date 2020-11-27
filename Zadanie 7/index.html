@@ -371,18 +371,21 @@
             console.log("Acceleration along the Y-axis " + acl.y);
             console.log("Acceleration along the Z-axis " + acl.z);
 
-            if (initX < acl.x) {
-                moveAndDrawCar(step)
-            } else if (initX > acl.x) {
-                moveAndDrawCar(-step)
+            if ((initX - 10) < acl.x) {
+                rightKeyDown = true
+            } else if ((initX + 10) > acl.x) {
+                leftKeyDown = true
+            } else {
+                leftKeyDown = false
+                rightKeyDown = false
             }
             
         });
 
         acl.start();
-        // document.getElementById("space").addEventListener("touchstart", function() { 
-        //     shootBall();
-        // });
+        document.getElementById("space").addEventListener("touchstart", function() { 
+            shootBall();
+        });
 
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
