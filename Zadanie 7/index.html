@@ -362,22 +362,22 @@
             }
         }
 
-        function handleMotion(event) {
-            console.log("Acceleration along the X-axis " + event.acceleration.x);
-            console.log("Acceleration along the Y-axis " + event.acceleration.y);
+        function handleOrientation(event) {
+            console.log("Acceleration along the X-axis " + event.beta);
+            console.log("Acceleration along the Y-axis " + event.gamma);
 
-            if (event.acceleration.x < -2.5) {
+            if (event.beta < -5) {
                 rightKeyDown = true
-            } else if (event.acceleration.x > 2.5) {
+            } else if (event.beta > 5) {
                 leftKeyDown = true
             } else {
                 leftKeyDown = false
                 rightKeyDown = false
             }
 
-            if (event.acceleration.y > 2.5) {
+            if (event.gamma > 5) {
                 speedDown = true
-            } else if (event.acceleration.y < -2.5) {
+            } else if (event.gamma < -5) {
                 speedUp = true;
             } else {
                 speedUp = false;
@@ -385,7 +385,7 @@
             }
         };
 
-        window.addEventListener('devicemotion', handleMotion);
+        window.addEventListener('deviceorientation', handleOrientation);
         
         document.getElementById("space").addEventListener("touchstart", function() { 
             shootBall();
