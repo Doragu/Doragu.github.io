@@ -362,33 +362,31 @@
             }
         }
 
-        let acl = new Accelerometer({frequency: 60});
+        function handleMotion(event) {
+            console.log("Acceleration along the X-axis " + event.acceleration.x);
+            console.log("Acceleration along the Y-axis " + event.acceleration.y);
 
-        acl.addEventListener('reading', () => {
-            console.log("Acceleration along the X-axis " + acl.x);
-            console.log("Acceleration along the Y-axis " + acl.y);
-            console.log("Acceleration along the Z-axis " + acl.z);
-
-            if (acl.x < -3.0) {
+            if (event.acceleration.x < -2.5) {
                 rightKeyDown = true
-            } else if (acl.x > 3.0) {
+            } else if (event.acceleration.x > 2.5) {
                 leftKeyDown = true
             } else {
                 leftKeyDown = false
                 rightKeyDown = false
             }
 
-            if (acl.y > 3.0) {
+            if (event.acceleration.y > 2.5) {
                 speedDown = true
-            } else if (acl.y < -3.0) {
+            } else if (event.acceleration.y < -2.5) {
                 speedUp = true;
             } else {
                 speedUp = false;
                 speedDown = false;
             }
-        });
+        };
 
-        acl.start();
+        window.addEventListener('devicemotion', handleMotion);
+        
         document.getElementById("space").addEventListener("touchstart", function() { 
             shootBall();
         });
