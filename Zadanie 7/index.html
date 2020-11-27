@@ -364,16 +364,14 @@
 
         let acl = new Accelerometer({frequency: 60});
 
-        var initX = acl.x;
-
         acl.addEventListener('reading', () => {
             console.log("Acceleration along the X-axis " + acl.x);
             console.log("Acceleration along the Y-axis " + acl.y);
             console.log("Acceleration along the Z-axis " + acl.z);
 
-            if ((initX - 1) < acl.x) {
+            if (-4.0 > acl.x) {
                 rightKeyDown = true
-            } else if ((initX + 1) > acl.x) {
+            } else if (4.0 < acl.x) {
                 leftKeyDown = true
             } else {
                 leftKeyDown = false
