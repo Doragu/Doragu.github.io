@@ -366,18 +366,18 @@
             console.log("Acceleration along the X-axis " + event.beta);
             console.log("Acceleration along the Y-axis " + event.gamma);
 
-            if (event.beta < -5) {
+            if (event.gamma < -5) {
                 rightKeyDown = true
-            } else if (event.beta > 5) {
+            } else if (event.gamma > 5) {
                 leftKeyDown = true
             } else {
                 leftKeyDown = false
                 rightKeyDown = false
             }
 
-            if (event.gamma > 5) {
+            if (event.beta > 5) {
                 speedDown = true
-            } else if (event.gamma < -5) {
+            } else if (event.beta < -5) {
                 speedUp = true;
             } else {
                 speedUp = false;
