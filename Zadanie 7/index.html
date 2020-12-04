@@ -407,7 +407,7 @@
                 })
                     .catch(console.error)
             } else {
-                console.log("no DeviceOrientationEvent")
+                window.addEventListener("deviceorientation", handleOrientation)
             }
         }
 
