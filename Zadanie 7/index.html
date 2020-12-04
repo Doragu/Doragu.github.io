@@ -30,6 +30,12 @@
         height: 250px;
     }
 
+    #request {
+        margin-left: 380px;
+        width: 250px;
+        height: 250px;
+    }
+
 </style>
     <meta name="viewport" content="width=device-width">
 </head>
@@ -38,6 +44,7 @@
     <canvas id="canvas" width=1000 height=800></canvas><br>
     <div id="buttons"> 
         <button id="space" type="button"></button> 
+        <button id="request" type="button">Request</button> 
     </div>
     <p>Zielone klocki trzeba omijać, żółte łapać.</p>
     <p>Za ominięcie zielonego klocka dostaje się 1 punkt, za zestrzelenie 2, a za złapanie żółtego 5 punktów.</p>
@@ -400,12 +407,12 @@
                 })
                     .catch(console.error)
             } else {
-                alert( "DeviceMotionEvent is not defined" );
+                console.log("no DeviceMotionEvent")
             }
         }
 
-        const btn = document.getElementById("space");
-        btn.addEventListener("click", permission);
+        const btn = document.getElementById("request");
+        btn.addEventListener("touchstart", permission);
 
         // if (DeviceOrientationEvent && typeof(DeviceOrientationEvent.requestPermission) === "function") {
         //     const permissionState = DeviceOrientationEvent.requestPermission();
