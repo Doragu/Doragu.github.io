@@ -398,8 +398,8 @@
         // }
 
         function permission () {
-            if (typeof(DeviceMotionEvent) !== "undefined" && typeof(DeviceMotionEvent.requestPermission) === "function" ) {
-                DeviceMotionEvent.requestPermission()
+            if (typeof(DeviceOrientationEvent) !== "undefined" && typeof(DeviceOrientationEvent.requestPermission) === "function" ) {
+                DeviceOrientationEvent.requestPermission()
                     .then(response => {
                     if (response == "granted") {
                         window.addEventListener("deviceorientation", handleOrientation)
@@ -407,7 +407,7 @@
                 })
                     .catch(console.error)
             } else {
-                console.log("no DeviceMotionEvent")
+                console.log("no DeviceOrientationEvent")
             }
         }
 
