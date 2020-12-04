@@ -2,6 +2,10 @@
 <html>
 <head>
 <style>
+    * {
+        touch-action: manipulation;
+    }
+
     html {
         min-height: 100%;
         position: relative;
@@ -382,15 +386,36 @@
             }
         };
 
-        if (DeviceOrientationEvent && typeof(DeviceOrientationEvent.requestPermission) === "function") {
-            const permissionState = DeviceOrientationEvent.requestPermission();
-            
-            if (permissionState === "granted") {
-                window.addEventListener('deviceorientation', handleOrientation);
-            }
-        } else {
-            window.addEventListener('deviceorientation', handleOrientation);
+        if ( location.protocol != "https:" ) {
+            location.href = "https:" + window.location.href.substring(window.location.protocol.length);
         }
+
+        function permission () {
+            if ( typeof( DeviceMotionEvent ) !== "undefined" && typeof( DeviceMotionEvent.requestPermission ) === "function" ) {
+                DeviceMotionEvent.requestPermission()
+                    .then(response => {
+                    if (response == "granted") {
+                        window.addEventListener("deviceorientation", handleOrientation)
+                    }
+                })
+                    .catch(console.error)
+            } else {
+                alert( "DeviceMotionEvent is not defined" );
+            }
+        }
+
+        const btn = document.getElementById("space");
+        btn.addEventListener("click", permission);
+
+        // if (DeviceOrientationEvent && typeof(DeviceOrientationEvent.requestPermission) === "function") {
+        //     const permissionState = DeviceOrientationEvent.requestPermission();
+            
+        //     if (permissionState === "granted") {
+        //         window.addEventListener('deviceorientation', handleOrientation);
+        //     }
+        // } else {
+        //     window.addEventListener('deviceorientation', handleOrientation);
+        // }
 
         document.getElementById("space").addEventListener("touchstart", function() { 
             shootBall();
