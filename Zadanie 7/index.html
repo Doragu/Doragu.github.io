@@ -249,19 +249,19 @@
         function rotateRoad() {
             angle = 0.2
 
-            if (rotateCounter >= 20) {
+            if (rotateCounter >= 15) {
                 if (turn == 0) {
                     if (Math.random() > 0.5) {
-                        turn = -1
+                        turn = 1
                     } else {
                         turn = -1;
                     }
                 }
 
                 if (rotate < 20) {    
-                    ctx.translate(500, 400);
+                    ctx.translate(400, 300);
                     ctx.rotate(turn * angle * Math.PI / 180);
-                    ctx.translate(-500, -400);
+                    ctx.translate(-400, -300);
 
                     rotate += angle;
                 } else {
@@ -393,9 +393,9 @@
             }
         };
 
-        if ( location.protocol != "https:" ) {
-            location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-        }
+        // if ( location.protocol != "https:" ) {
+        //     location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+        // }
 
         function permission () {
             if (typeof(DeviceOrientationEvent) !== "undefined" && typeof(DeviceOrientationEvent.requestPermission) === "function" ) {
@@ -428,15 +428,15 @@
 
         var canvasOffset = canvas.getBoundingClientRect();
         var offsetX = canvasOffset.left + 120;
-        var offsetY = canvasOffset.top - 200;
+        var offsetY = canvasOffset.top - 300;
         var canvasWidth = 2000;
         var canvasHeight = 1800;
 
         var roadWidth = 600
-        var roadHeight = 1500;
+        var roadHeight = 1300;
 
         var carX = offsetX + 150;
-        var carY = canvas.height - 150;
+        var carY = canvas.height - 200;
         var carWidth = 100;
         var wheelWidth = 15
 
