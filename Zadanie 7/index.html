@@ -393,9 +393,9 @@
             }
         };
 
-        // if ( location.protocol != "https:" ) {
-        //     location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-        // }
+        if ( location.protocol != "https:" ) {
+            location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+        }
 
         function permission () {
             if (typeof(DeviceOrientationEvent) !== "undefined" && typeof(DeviceOrientationEvent.requestPermission) === "function" ) {
@@ -407,13 +407,17 @@
                 })
                     .catch(console.error)
             } else {
-                window.addEventListener("deviceorientation", handleOrientation)
+                window.addEventListener("deviceorientation", handleOrientation);
             }
         }
 
         const btn = document.getElementById("request");
         btn.addEventListener("click", permission);
-
+        
+        if (typeof(DeviceOrientationEvent) === "undefined" && typeof(DeviceOrientationEvent.requestPermission) !== "function" ) {
+            window.addEventListener("deviceorientation", handleOrientation);
+        }
+        
         document.getElementById("space").addEventListener("touchstart", function() { 
             shootBall();
         });
