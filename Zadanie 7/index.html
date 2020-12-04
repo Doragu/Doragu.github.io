@@ -414,10 +414,6 @@
         const btn = document.getElementById("request");
         btn.addEventListener("click", permission);
         
-        if (typeof(DeviceOrientationEvent) === "undefined" && typeof(DeviceOrientationEvent.requestPermission) !== "function" ) {
-            window.addEventListener("deviceorientation", handleOrientation);
-        }
-        
         document.getElementById("space").addEventListener("touchstart", function() { 
             shootBall();
         });
