@@ -117,7 +117,7 @@
         }
 
         function handleOrientation(event) {
-            if (window.orientation == "90" || window.orientation == "-90") {
+            if (window.innerWidth > window.innerHeight) {
                 if (event.beta < -8) {
                     leftKeyDown = true
                 } else if (event.beta > 8) {
