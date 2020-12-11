@@ -117,13 +117,24 @@
         }
 
         function handleOrientation(event) {
-            if (event.gamma < -8) {
-                leftKeyDown = true
-            } else if (event.gamma > 8) {
-                rightKeyDown = true
-            } else {
-                leftKeyDown = false
-                rightKeyDown = false
+            if (window.orientation == "90" || window.orientation == "-90") {
+                if (event.beta < -8) {
+                    leftKeyDown = true
+                } else if (event.beta > 8) {
+                    rightKeyDown = true
+                } else {
+                    leftKeyDown = false
+                    rightKeyDown = false
+                }
+            } else {    
+                if (event.gamma < -8) {
+                    leftKeyDown = true
+                } else if (event.gamma > 8) {
+                    rightKeyDown = true
+                } else {
+                    leftKeyDown = false
+                    rightKeyDown = false
+                }
             }
         };
 
