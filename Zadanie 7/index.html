@@ -55,9 +55,9 @@
 <body class="disable-dbl-tap-zoom">
     <canvas id="canvas" width=800 height=600></canvas><br>
     <div id="buttons"> 
-        <button id="frontArrow" type="button"></button> 
-        <button id="space" type="button"></button> 
-        <button id="bottomArrow" type="button"></button> 
+        <button id="frontArrow" type="button">Speed</button> 
+        <button id="space" type="button">Shoot</button> 
+        <button id="bottomArrow" type="button">Slow</button> 
         <button id="request" type="button">Start Game</button> 
     </div>
     <p>Zielone klocki trzeba omijać, żółte łapać.</p>
@@ -414,6 +414,8 @@
             } else {
                 window.addEventListener("deviceorientation", handleOrientation);
             }
+
+            drive();
         }
 
         const btn = document.getElementById("request");
@@ -438,7 +440,6 @@
         document.getElementById("bottomArrow").addEventListener("touchend", function() { 
             speedDown = false;
         });
-
 
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
@@ -478,13 +479,13 @@
         var collectableWidth = 50
         var isCollectable = 0
 
-        var step = 22;
+        var step = 18;
         var rotate = 1;
         var rotateCounter = 0;
         var turn = 0;
         var score = 0;
 
-        drive();
+        // drive();
 
     </script>
 </body>
