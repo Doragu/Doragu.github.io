@@ -18,13 +18,13 @@
     }
 
     #buttons {
-        width: 800px;
+        width: 100%;
+        height: 20%;
     }
 
     #request {
-        margin-left: 280px;
-        width: 250px;
-        height: 250px;
+        width: 100%;
+        height: 20%;
     }
 
     .disable-dbl-tap-zoom {
@@ -50,7 +50,12 @@
         }
 
         function moveAndDrawPlatform(step) {
+            platformX += step;
 
+            ctx.beginPath();
+            ctx.fillStyle = "yellow";
+            ctx.rect(platformX, platformY, platformWidth, platformHeight);
+            ctx.fill();
         }
 
         function draw() {
@@ -58,37 +63,75 @@
 
             moveAndDrawPlatform(0);
 
+            if (leftKeyDown) {
+                if (platformX > 0) {
+                    moveAndDrawPlatform(-step); 
+                }
+            } else if (rightKeyDown) {
+                if (platformX < (ctx.canvas.width - platformWidth)) {
+                    moveAndDrawPlatform(step);
+                }
+            }
+
             requestAnimationFrame(draw);
         }
 
-        // function permission () {
-        //     if (typeof(DeviceOrientationEvent) !== "undefined" && typeof(DeviceOrientationEvent.requestPermission) === "function" ) {
-        //         DeviceOrientationEvent.requestPermission()
-        //             .then(response => {
-        //             if (response == "granted") {
-        //                 window.addEventListener("deviceorientation", handleOrientation)
-        //             }
-        //         })
-        //             .catch(console.error)
-        //     } else {
-        //         window.addEventListener("deviceorientation", handleOrientation);
-        //     }
-        // }
-
-        // document.getElementById("request").addEventListener("click", permission);
-
         function changeCtxSize() {
             ctx.canvas.width = window.innerWidth;
-            ctx.canvas.height = window.innerHeight * 0.75;
+            ctx.canvas.height = window.innerHeight * 0.8;
+
+            platformX = ctx.canvas.width / 2 - 50;
+            platformY = ctx.canvas.height - platformYOffset;
+
+            console.log(platformX)
+            console.log(platformY)
         }
+
+        function checkKey(e) {
+            // if (isTargetHit()) {
+            //     return
+            // }
+
+            e = e || window.event;
+            if (e.keyCode == '37') { // left arrow
+                e.preventDefault();
+                leftKeyDown = true
+                rightKeyDown = false
+            } else if (e.keyCode == '39') { // right arrow
+                e.preventDefault();
+                rightKeyDown = true
+                leftKeyDown = false
+            }
+        }
+
+        function stopMove(e) {
+            if (e.keyCode == '37') {
+                leftKeyDown = false;
+            } else if (e.keyCode == '39') {
+                rightKeyDown = false;
+            }
+        }
+
+        document.onkeydown = checkKey;
+        document.onkeyup = stopMove
+        window.onresize = changeCtxSize;
 
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
         
         ctx.canvas.width = window.innerWidth;
-        ctx.canvas.height = window.innerHeight * 0.75;
+        ctx.canvas.height = window.innerHeight * 0.8;
 
-        window.onresize = changeCtxSize;
+        var platformYOffset = 30;
+        var platformWidth = 120;
+        var platformHeight = 15;
+        var platformX = ctx.canvas.width / 2 - (platformWidth / 2);
+        var platformY = ctx.canvas.height - platformYOffset;
+
+
+        var leftKeyDown = false;
+        var rightKeyDown = false;
+        var step = 10;
 
         draw()
 
