@@ -24,11 +24,15 @@
 
     #request {
         width: 100%;
-        height: 20%;
+        height: 90%;
     }
 
     .disable-dbl-tap-zoom {
         touch-action: manipulation;
+    }
+
+    canvas {
+        width: 100%;
     }
 
 </style>
@@ -112,9 +116,38 @@
             }
         }
 
+        function handleOrientation(event) {
+            if (event.gamma < -8) {
+                leftKeyDown = true
+            } else if (event.gamma > 8) {
+                rightKeyDown = true
+            } else {
+                leftKeyDown = false
+                rightKeyDown = false
+            }
+        };
+
         document.onkeydown = checkKey;
         document.onkeyup = stopMove
         window.onresize = changeCtxSize;
+
+        function permission () {
+            if (typeof(DeviceOrientationEvent) !== "undefined" && typeof(DeviceOrientationEvent.requestPermission) === "function" ) {
+                DeviceOrientationEvent.requestPermission()
+                    .then(response => {
+                    if (response == "granted") {
+                        window.addEventListener("deviceorientation", handleOrientation)
+                    }
+                })
+                    .catch(console.error)
+            } else {
+                window.addEventListener("deviceorientation", handleOrientation);
+            }
+
+            draw();
+        }
+
+        document.getElementById("request").addEventListener("click", permission);
 
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
@@ -128,13 +161,9 @@
         var platformX = ctx.canvas.width / 2 - (platformWidth / 2);
         var platformY = ctx.canvas.height - platformYOffset;
 
-
         var leftKeyDown = false;
         var rightKeyDown = false;
         var step = 10;
-
-        draw()
-
     </script>
 </body>
 
