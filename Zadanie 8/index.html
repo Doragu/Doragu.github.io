@@ -78,6 +78,7 @@
 
         function checkIfPlatformHit() {
             if (ballY + (ballSize / 2) >= platformY && (ballX < platformX || ballX > (platformX + platformWidth))) {
+                gameLost = true;
                 return false;
             } else if (ballY + (ballSize / 2) >= platformY && ballX >= platformX && ballX <= (platformX + platformWidth)) {
                 return true;
@@ -97,11 +98,10 @@
                 } else if (wallNumber == 4) {
                     ballXSpeed *= -1;
                 } else if (wallNumber == 3) {
-                    // ballYSpeed *= -1; 
                     ballXSpeed = 0; // game lose
                     ballYSpeed = 0;
                 }
-            } else if (checkIfPlatformHit()) {
+            } else if (!gameLost && checkIfPlatformHit()) {
                 ballYSpeed *= -1;
             }
         }
@@ -228,12 +228,19 @@
         var ballX = ctx.canvas.width / 2;
         var ballY = ctx.canvas.height - ballYOffset;
         var ballSize = 10;
-        var ballXSpeed = 3;
-        var ballYSpeed = 3;
+        
+        if (Math.random() > 0.5) {
+            var ballXSpeed = parseInt(Math.random() * 2) + 3;
+        } else {
+            var ballXSpeed = -1 * (parseInt(Math.random() * 2) + 3);
+        }
+        var ballYSpeed = parseInt(Math.random() * 2) + 3;
 
         var leftKeyDown = false;
         var rightKeyDown = false;
         var step = 10;
+
+        var gameLost = false;
 
         draw();
     </script>
