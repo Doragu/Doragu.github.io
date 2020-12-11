@@ -45,6 +45,9 @@
         <button id="request" type="button">Start Game</button> 
     </div>
     <script>
+
+        // DRAWING
+
         function drawBoard() {
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -60,6 +63,17 @@
             ctx.fillStyle = "yellow";
             ctx.rect(platformX, platformY, platformWidth, platformHeight);
             ctx.fill();
+        }
+
+        function drawBoxes() {
+            boxes.forEach(function(item, index, array) {
+                ctx.beginPath();
+                ctx.fillStyle = "black";
+                ctx.fillRect(item.x, item.y, boxWidth, boxHeight);
+                ctx.fillStyle = "red";
+                ctx.fillRect(item.x + boxBorder, item.y + boxBorder, boxWidth - boxBorder - boxBorder, boxHeight - boxBorder - boxBorder);
+                // ctx.fill();
+            });
         }
 
         function checkWhichWallWasHit() {
@@ -123,7 +137,7 @@
             drawBoard();
 
             moveAndDrawPlatform(0);
-
+            drawBoxes();
             moveAndDrawBall();
 
             if (leftKeyDown) {
@@ -139,12 +153,18 @@
             requestAnimationFrame(draw);
         }
 
+        // EVENTS
+
         function changeCtxSize() {
             ctx.canvas.width = window.innerWidth;
             ctx.canvas.height = window.innerHeight * 0.8;
 
             platformX = ctx.canvas.width / 2 - 50;
             platformY = ctx.canvas.height - platformYOffset;
+
+            generateBoxes()
+            var boxWidth = ctx.canvas.width * 0.1;
+            var boxHeight = ctx.canvas.height * 0.03;
         }
 
         function checkKey(e) {
@@ -190,10 +210,6 @@
             }
         };
 
-        document.onkeydown = checkKey;
-        document.onkeyup = stopMove
-        window.onresize = changeCtxSize;
-
         function permission () {
             if (typeof(DeviceOrientationEvent) !== "undefined" && typeof(DeviceOrientationEvent.requestPermission) === "function" ) {
                 DeviceOrientationEvent.requestPermission()
@@ -210,7 +226,28 @@
             // draw();
         }
 
+        document.onkeydown = checkKey;
+        document.onkeyup = stopMove
+        window.onresize = changeCtxSize;
         document.getElementById("request").addEventListener("click", permission);
+
+        // INIT VALUES
+
+        class Box {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+        }
+
+        function generateBoxes() {
+            boxes = []
+
+            for (i = ctx.canvas.width * 0.1; i <= ctx.canvas.width * 0.9; i += ctx.canvas.width * 0.1) {
+                var box = new Box(i, 20);
+                boxes.push(box);
+            }
+        }
 
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
@@ -235,6 +272,12 @@
             var ballXSpeed = -1 * (parseInt(Math.random() * 2) + 3);
         }
         var ballYSpeed = parseInt(Math.random() * 2) + 3;
+
+        var boxes = []
+        var boxWidth = ctx.canvas.width * 0.1;
+        var boxHeight = ctx.canvas.height * 0.03;
+        var boxBorder = 1;
+        generateBoxes()
 
         var leftKeyDown = false;
         var rightKeyDown = false;
