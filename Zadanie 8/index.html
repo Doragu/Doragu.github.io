@@ -36,20 +36,28 @@
 </head>
 
 <body class="disable-dbl-tap-zoom">
-    <canvas id="canvas" width=800 height=600></canvas><br>
+    <canvas id="canvas"></canvas><br>
     <div id="buttons">
         <button id="request" type="button">Start Game</button> 
     </div>
     <script>
-        
-
-        function draw() {
-            ctx.clearRect(offsetY, offsetY, canvasWidth, canvasHeight);
+        function drawBoard() {
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
             ctx.fillStyle = "grey";
-            ctx.rect(-100, -100, canvasWidth, canvasHeight);
+            ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
             ctx.fill();
-            
+        }
+
+        function moveAndDrawPlatform(step) {
+
+        }
+
+        function draw() {
+            drawBoard();
+
+            moveAndDrawPlatform(0);
+
             requestAnimationFrame(draw);
         }
 
@@ -69,13 +77,18 @@
 
         // document.getElementById("request").addEventListener("click", permission);
 
+        function changeCtxSize() {
+            ctx.canvas.width = window.innerWidth;
+            ctx.canvas.height = window.innerHeight * 0.75;
+        }
+
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
-        var canvasWidth = 2000;
-        var canvasHeight = 1800;
-        var canvasOffset = canvas.getBoundingClientRect();
-        var offsetX = canvasOffset.left + 120;
-        var offsetY = canvasOffset.top - 300;
+        
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight * 0.75;
+
+        window.onresize = changeCtxSize;
 
         draw()
 
