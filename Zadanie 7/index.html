@@ -24,9 +24,21 @@
         width: 800px;
     }
 
+    #frontArrow {
+        margin-left: 280px;
+        width: 250px;
+        height: 250px;
+    }
+
+    #bottomArrow {
+        margin-left: 280px;
+        width: 250px;
+        height: 250px;
+    }
+
     #space {
-        margin-left: 130px;
-        width: 600px;
+        margin-left: 280px;
+        width: 250px;
         height: 250px;
     }
 
@@ -43,8 +55,10 @@
 <body class="disable-dbl-tap-zoom">
     <canvas id="canvas" width=800 height=600></canvas><br>
     <div id="buttons"> 
+        <button id="frontArrow" type="button"></button> 
         <button id="space" type="button"></button> 
-        <button id="request" type="button">Request</button> 
+        <button id="bottomArrow" type="button"></button> 
+        <button id="request" type="button">Start Game</button> 
     </div>
     <p>Zielone klocki trzeba omijać, żółte łapać.</p>
     <p>Za ominięcie zielonego klocka dostaje się 1 punkt, za zestrzelenie 2, a za złapanie żółtego 5 punktów.</p>
@@ -382,20 +396,11 @@
                 leftKeyDown = false
                 rightKeyDown = false
             }
-
-            if (event.beta > 8) {
-                speedDown = true
-            } else if (event.beta < -8) {
-                speedUp = true;
-            } else {
-                speedUp = false;
-                speedDown = false;
-            }
         };
 
-        if ( location.protocol != "https:" ) {
-            location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-        }
+        // if ( location.protocol != "https:" ) {
+        //     location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+        // }
 
         function permission () {
             if (typeof(DeviceOrientationEvent) !== "undefined" && typeof(DeviceOrientationEvent.requestPermission) === "function" ) {
@@ -417,6 +422,23 @@
         document.getElementById("space").addEventListener("touchstart", function() { 
             shootBall();
         });
+
+        document.getElementById("frontArrow").addEventListener("touchstart", function() { 
+            speedUp = true;
+        });
+
+        document.getElementById("frontArrow").addEventListener("touchend", function() { 
+            speedUp = false;
+        });
+
+        document.getElementById("bottomArrow").addEventListener("touchstart", function() { 
+            speedDown = true;
+        });
+
+        document.getElementById("bottomArrow").addEventListener("touchend", function() { 
+            speedDown = false;
+        });
+
 
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
