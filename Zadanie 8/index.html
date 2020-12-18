@@ -83,7 +83,7 @@
                 return 1; // górna ściana
             } else if (ballX - (ballSize / 2) <= 0) {
                 return 2; // lewa ściana
-            } else if (ballY + (ballSize / 2)>= ctx.canvas.height) {
+            } else if (ballY + (ballSize / 2) >= ctx.canvas.height) {
                 return 3; // dolna ściana
             } else if (ballX + (ballSize / 2) >= ctx.canvas.width) {
                 return 4; // prawa ściana
@@ -219,8 +219,13 @@
             ctx.canvas.width = window.innerWidth;
             ctx.canvas.height = window.innerHeight * 0.8;
 
+            platformYOffset = ctx.canvas.height * 0.06;
             platformX = ctx.canvas.width / 2 - 50;
             platformY = ctx.canvas.height - platformYOffset;
+
+            platformWidth = ctx.canvas.width * 0.15;
+            platformHeight = ctx.canvas.height * 0.04;
+            ballSize = ctx.canvas.height * 0.02;
 
             boxWidth = ctx.canvas.width * 0.1;
             boxHeight = ctx.canvas.height * 0.04;
@@ -325,16 +330,17 @@
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight * 0.8;
 
-        var platformYOffset = 30;
-        var platformWidth = 120;
-        var platformHeight = 15;
+        var platformYOffset = ctx.canvas.height * 0.06;
+        var platformWidth = ctx.canvas.width * 0.15;
+        var platformHeight = ctx.canvas.height * 0.04;
+        
         var platformX = ctx.canvas.width / 2 - (platformWidth / 2);
         var platformY = ctx.canvas.height - platformYOffset;
 
         var ballYOffset = ctx.canvas.height / 2;
         var ballX = ctx.canvas.width / 2;
         var ballY = ctx.canvas.height - ballYOffset;
-        var ballSize = 10;
+        var ballSize = ctx.canvas.height * 0.02;
         var initialBallSpeed = 3;
         var speedUp = 1.02;
         
