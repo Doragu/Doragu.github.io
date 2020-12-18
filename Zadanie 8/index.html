@@ -126,10 +126,10 @@
                 } else if (ballY + (ballSize / 2) >= boxes[i].y && ballY + (ballSize / 2) - ballYSpeed < boxes[i].y && ballX >= boxes[i].x && ballX <= (boxes[i].x + boxWidth)) { 
                     removeBox(i);
                     return 1; //pozioma góra
-                } else if (ballY + (ballSize / 2) >= boxes[i].y && ballY - (ballSize / 2) <= boxes[i].y + boxHeight && ballX - (ballSize / 2) - ballXSpeed > boxes[i].x + boxWidth && ballX - (ballSize / 2) <= (boxes[i].x + boxWidth)) { 
+                } else if (ballY >= boxes[i].y && ballY <= boxes[i].y + boxHeight && ballX - (ballSize / 2) - ballXSpeed > boxes[i].x + boxWidth && ballX - (ballSize / 2) <= (boxes[i].x + boxWidth)) { 
                     removeBox(i);
                     return 2; //pionowa prawa
-                } else if (ballY + (ballSize / 2) >= boxes[i].y && ballY - (ballSize / 2) <= boxes[i].y + boxHeight && ballX + (ballSize / 2) >= boxes[i].x && ballX + (ballSize / 2) - ballXSpeed< boxes[i].x) { 
+                } else if (ballY >= boxes[i].y && ballY <= boxes[i].y + boxHeight && ballX + (ballSize / 2) >= boxes[i].x && ballX + (ballSize / 2) - ballXSpeed < boxes[i].x) { 
                     removeBox(i);
                     return 2; //pionowa lewa
                 }
