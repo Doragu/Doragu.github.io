@@ -68,12 +68,13 @@
 
         function drawBoxes() {
             boxes.forEach(function(item, index, array) {
-                ctx.beginPath();
-                ctx.fillStyle = "black";
-                ctx.fillRect(item.x, item.y, boxWidth, boxHeight);
-                ctx.fillStyle = "green";
-                ctx.fillRect(item.x + boxBorder, item.y + boxBorder, boxWidth - boxBorder - boxBorder, boxHeight - boxBorder - boxBorder);
-                // ctx.fill();
+                if (item != undefined) {
+                    ctx.beginPath();
+                    ctx.fillStyle = "black";
+                    ctx.fillRect(item.x, item.y, boxWidth, boxHeight);
+                    ctx.fillStyle = item.color;
+                    ctx.fillRect(item.x + boxBorder, item.y + boxBorder, boxWidth - boxBorder - boxBorder, boxHeight - boxBorder - boxBorder);        
+                }
             });
         }
 
@@ -103,8 +104,11 @@
         }
 
         function removeBox(index) {
-            console.log("removed" + i);
             boxes.splice(index, 1);
+            removedBoxes.push(index);
+            ballXSpeed *= speedUp;
+            ballYSpeed *= speedUp;
+            console.log(boxes.length)
         }
 
         function checkWhichWallOfBoxIsHit() {
@@ -120,13 +124,13 @@
                 if (ballY - (ballSize / 2) <= boxes[i].y + boxHeight && ballY - (ballSize / 2) - ballYSpeed > boxes[i].y + boxHeight && ballX >= boxes[i].x && ballX <= (boxes[i].x + boxWidth)) { 
                     removeBox(i);
                     return 1; //pozioma dół
-                } else if (ballY + (ballSize / 2) >= boxes[i].y && ballY + (ballSize / 2) + ballYSpeed < boxes[i].y && ballX >= boxes[i].x && ballX <= (boxes[i].x + boxWidth)) { 
+                } else if (ballY + (ballSize / 2) >= boxes[i].y && ballY + (ballSize / 2) - ballYSpeed < boxes[i].y && ballX >= boxes[i].x && ballX <= (boxes[i].x + boxWidth)) { 
                     removeBox(i);
                     return 1; //pozioma góra
-                } else if (ballY + (ballSize / 2) >= boxes[i].y && ballY - (ballSize / 2) <= boxes[i].y + boxHeight && ballX + ballXSpeed> boxes[i].x + boxWidth && ballX <= (boxes[i].x + boxWidth)) { 
+                } else if (ballY + (ballSize / 2) >= boxes[i].y && ballY - (ballSize / 2) <= boxes[i].y + boxHeight && ballX - (ballSize / 2) - ballXSpeed > boxes[i].x + boxWidth && ballX - (ballSize / 2) <= (boxes[i].x + boxWidth)) { 
                     removeBox(i);
                     return 2; //pionowa prawa
-                } else if (ballY + (ballSize / 2) >= boxes[i].y && ballY - (ballSize / 2) <= boxes[i].y + boxHeight && ballX >= boxes[i].x && ballX - ballXSpeed< boxes[i].x) { 
+                } else if (ballY + (ballSize / 2) >= boxes[i].y && ballY - (ballSize / 2) <= boxes[i].y + boxHeight && ballX + (ballSize / 2) >= boxes[i].x && ballX + (ballSize / 2) - ballXSpeed< boxes[i].x) { 
                     removeBox(i);
                     return 2; //pionowa lewa
                 }
@@ -146,9 +150,8 @@
                 } else if (wallNumber == 4) {
                     ballXSpeed *= -1;
                 } else if (wallNumber == 3) {
-                    // ballXSpeed = 0; // game lose
-                    // ballYSpeed = 0;
-                    ballYSpeed *= -1;
+                    ballXSpeed = 0; // game lose
+                    ballYSpeed = 0;
                 }
             } else if (!gameLost && checkIfPlatformHit()) {
                 ballYSpeed *= -1;
@@ -176,9 +179,24 @@
             ctx.stroke();
         }
 
-        function draw() {
-            drawBoard();
+        function drawEndGame(text) {
+            ctx.beginPath();
+            ctx.font = "18px Arial";
+            ctx.fillStyle = "black" 
+            ctx.fillText(text, (ctx.canvas.width / 2) - 50, ctx.canvas.height / 2);
+            ctx.stroke();
+        }
 
+        function draw() {
+            if (boxes.length == 0) {
+                drawEndGame("Wygrałeś");
+                return
+            } else if (ballXSpeed == 0 && boxes.length > 0) {
+                drawEndGame("Przegrałeś");
+                return
+            }
+            
+            drawBoard();
             moveAndDrawPlatform(0);
             drawBoxes();
             moveAndDrawBall();
@@ -266,7 +284,7 @@
                 window.addEventListener("deviceorientation", handleOrientation);
             }
 
-            // draw();
+            draw();
         }
 
         document.onkeydown = checkKey;
@@ -276,10 +294,13 @@
 
         // INIT VALUES
 
+        var boxColours = ["yellow", "green", "white", "blue", "orange", "red", "pink", "purple"]
+
         class Box {
-            constructor(x, y) {
+            constructor(x, y) {     
                 this.x = x;
                 this.y = y;
+                this.color = boxColours[parseInt(Math.random() * boxColours.length)];
             }
         }
 
@@ -287,9 +308,13 @@
             boxes = []
 
             for (i = 1; i <= yLevels; i++) {
-               for (j = boxWidth / 2; j <= ctx.canvas.width - boxWidth; j += boxWidth) {
-                    var box = new Box(j, i * boxHeight);
-                    boxes.push(box);
+                for (j = boxWidth / 2 + boxWidth + boxWidth + boxWidth; j <= ctx.canvas.width - boxWidth - boxWidth; j += boxWidth) {
+                    if (!removedBoxes.includes(boxes.length)) {
+                        var box = new Box(j, i * boxHeight);
+                        boxes.push(box);
+                    } else {
+                        boxes.push(undefined);
+                    }
                 }
             }
         }
@@ -310,20 +335,23 @@
         var ballX = ctx.canvas.width / 2;
         var ballY = ctx.canvas.height - ballYOffset;
         var ballSize = 10;
+        var initialBallSpeed = 3;
+        var speedUp = 1.02;
         
         if (Math.random() > 0.5) {
-            var ballXSpeed = parseInt(Math.random() * 2) + 10;
+            var ballXSpeed = parseInt(Math.random() * 2) + initialBallSpeed;
         } else {
-            var ballXSpeed = -1 * (parseInt(Math.random() * 2) + 10);
+            var ballXSpeed = -1 * (parseInt(Math.random() * 2) + initialBallSpeed);
         }
-        var ballYSpeed = -1 * (parseInt(Math.random() * 2) + 10);
+        var ballYSpeed = -1 * (parseInt(Math.random() * 2) + initialBallSpeed);
 
-        var boxes = []
+        var boxes = [];
+        var removedBoxes = [];
         var boxWidth = ctx.canvas.width * 0.1;
         var boxHeight = ctx.canvas.height * 0.04;
         var boxBorder = 1;
-        var yLevels = 5;
-        generateBoxes()
+        var yLevels = 1;
+        generateBoxes();
 
         var leftKeyDown = false;
         var rightKeyDown = false;
@@ -331,7 +359,7 @@
 
         var gameLost = false;
 
-        draw();
+        // draw();
     </script>
 </body>
 
