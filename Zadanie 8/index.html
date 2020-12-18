@@ -70,7 +70,7 @@
                 ctx.beginPath();
                 ctx.fillStyle = "black";
                 ctx.fillRect(item.x, item.y, boxWidth, boxHeight);
-                ctx.fillStyle = "red";
+                ctx.fillStyle = "green";
                 ctx.fillRect(item.x + boxBorder, item.y + boxBorder, boxWidth - boxBorder - boxBorder, boxHeight - boxBorder - boxBorder);
                 // ctx.fill();
             });
@@ -162,9 +162,9 @@
             platformX = ctx.canvas.width / 2 - 50;
             platformY = ctx.canvas.height - platformYOffset;
 
+            boxWidth = ctx.canvas.width * 0.1;
+            boxHeight = ctx.canvas.height * 0.03;
             generateBoxes()
-            var boxWidth = ctx.canvas.width * 0.1;
-            var boxHeight = ctx.canvas.height * 0.03;
         }
 
         function checkKey(e) {
@@ -223,7 +223,7 @@
                 window.addEventListener("deviceorientation", handleOrientation);
             }
 
-            draw();
+            // draw();
         }
 
         document.onkeydown = checkKey;
@@ -243,9 +243,11 @@
         function generateBoxes() {
             boxes = []
 
-            for (i = ctx.canvas.width * 0.1; i <= ctx.canvas.width * 0.9; i += ctx.canvas.width * 0.1) {
-                var box = new Box(i, 20);
-                boxes.push(box);
+            for (i = 1; i <= yLevels; i++) {
+               for (j = boxWidth / 2; j <= ctx.canvas.width - boxWidth; j += boxWidth) {
+                    var box = new Box(j, i * boxHeight);
+                    boxes.push(box);
+                }
             }
         }
 
@@ -277,6 +279,7 @@
         var boxWidth = ctx.canvas.width * 0.1;
         var boxHeight = ctx.canvas.height * 0.03;
         var boxBorder = 1;
+        var yLevels = 5;
         generateBoxes()
 
         var leftKeyDown = false;
@@ -285,7 +288,7 @@
 
         var gameLost = false;
 
-        // draw();
+        draw();
     </script>
 </body>
 
