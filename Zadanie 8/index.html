@@ -227,6 +227,10 @@
             platformHeight = ctx.canvas.height * 0.04;
             ballSize = ctx.canvas.height * 0.02;
 
+            if (platformWidth < 130) {
+                platformWidth = 130;
+            }
+
             boxWidth = ctx.canvas.width * 0.1;
             boxHeight = ctx.canvas.height * 0.04;
             generateBoxes()
@@ -332,6 +336,9 @@
 
         var platformYOffset = ctx.canvas.height * 0.06;
         var platformWidth = ctx.canvas.width * 0.15;
+        if (platformWidth < 100) {
+            platformWidth = 100;
+        }
         var platformHeight = ctx.canvas.height * 0.04;
         
         var platformX = ctx.canvas.width / 2 - (platformWidth / 2);
