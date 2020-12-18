@@ -108,7 +108,6 @@
             removedBoxes.push(index);
             ballXSpeed *= speedUp;
             ballYSpeed *= speedUp;
-            console.log(boxes.length)
         }
 
         function checkWhichWallOfBoxIsHit() {
@@ -284,6 +283,7 @@
                 window.addEventListener("deviceorientation", handleOrientation);
             }
 
+            document.getElementById("request").disabled = true;
             draw();
         }
 
@@ -308,7 +308,7 @@
             boxes = []
 
             for (i = 1; i <= yLevels; i++) {
-                for (j = boxWidth / 2 + boxWidth + boxWidth + boxWidth; j <= ctx.canvas.width - boxWidth - boxWidth; j += boxWidth) {
+                for (j = boxWidth / 2 + boxWidth; j <= ctx.canvas.width - boxWidth - boxWidth; j += boxWidth) {
                     if (!removedBoxes.includes(boxes.length)) {
                         var box = new Box(j, i * boxHeight);
                         boxes.push(box);
@@ -350,7 +350,7 @@
         var boxWidth = ctx.canvas.width * 0.1;
         var boxHeight = ctx.canvas.height * 0.04;
         var boxBorder = 1;
-        var yLevels = 1;
+        var yLevels = 4;
         generateBoxes();
 
         var leftKeyDown = false;
