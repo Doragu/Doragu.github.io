@@ -60,7 +60,8 @@
             lines.forEach(function(item, index, array) {
                 ctx.beginPath();
                 ctx.moveTo(item.x1, item.y1);
-                ctx.lineTo(item.x2, item.x2);
+                ctx.lineTo(item.x2, item.y2);
+                ctx.stroke();      
                 ctx.stroke();      
             });
         }
@@ -126,11 +127,77 @@
             }
         }
 
-        function generateLines() {
-            for (i = 0; i <= ctx.canvas.width * 0.9; i += ctx.canvas.width * 0.1) {
-                for (j = 0; j <= ctx.canvas.height * 0.9; j += ctx.canvas.width * 0.1) {
-                    lines.push(new Line(i, j, i + ctx.canvas.width * 0.1, j + ctx.canvas.height * 0.1))
+        function randomizeNextDirection() {
+            var rand = Math.random();
+
+            if (rand < 0.25) {
+                return "up";
+            } else if (rand < 0.5) {
+                return "down";
+            } else if (rand < 0.75) {
+                return "left";
+            } else if (rand < 1) {
+                return "right";
+            }
+
+            return "";
+        }
+
+        function checkIfDoesNotCover(newX, newY) {
+            for (i = 0; i < lines.length; i++) {
+                if ((lines[i].x1 == newX && lines[i].y1 == newY) || ((lines[i].x2 == newX && lines[i].y2 == newY))) {
+                    return false;
                 }
+            }
+
+            return true;
+        }
+
+        function generateLines() {
+            var direction = "down";
+            
+            var widthOfLine = ctx.canvas.width * 0.1;
+            var heightOfLine = ctx.canvas.height * 0.1;
+            var numberOfLines = 0;
+            var i = widthOfLine;
+            var j = 0;
+
+            // lines.push(new Line(100, 0, 100, 100));
+            // lines.push(new Line(100, 100, 200, 100));
+
+            while (numberOfLines < 100) {
+                switch (direction) {
+                    case "up":
+                        if (checkIfDoesNotCover(i, j - heightOfLine) && j >= 0) {
+                            lines.push(new Line(i, j, i, j - heightOfLine));
+                            j = j - heightOfLine;
+                            break;
+                        }
+                    case "down":
+                        if (checkIfDoesNotCover(i, j + heightOfLine) && j <= ctx.canvas.height) {
+                            lines.push(new Line(i, j, i, j + heightOfLine));
+                            j = j + heightOfLine
+                            break;
+                        }
+                    case "right":
+                        if (checkIfDoesNotCover(i + widthOfLine, j) && i <= ctx.canvas.width) {
+                            lines.push(new Line(i, j, i + widthOfLine, j));
+                            i = i + widthOfLine;
+                            break;
+                        }
+                    case "left":
+                        if (checkIfDoesNotCover(i - widthOfLine, j) && i >= 0) {
+                            lines.push(new Line(i, j, i - widthOfLine, j));
+                            i = i - widthOfLine;
+                            break;
+                        }
+                    default:
+                        break;
+                }
+
+                console.log(direction);
+                direction = randomizeNextDirection();
+                numberOfLines += 1;
             }
         }
 
