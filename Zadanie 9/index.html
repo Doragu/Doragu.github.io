@@ -48,7 +48,53 @@
 
         // DRAWING
 
+        function drawBoard() {
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+            ctx.fillStyle = "grey";
+            ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.fill();
+        }
+
+        function drawMaze() {
+            lines.forEach(function(item, index, array) {
+                ctx.beginPath();
+                ctx.moveTo(item.x1, item.y1);
+                ctx.lineTo(item.x2, item.x2);
+                ctx.stroke();      
+            });
+        }
+
+        function draw() {
+            drawBoard();
+            drawMaze();
+
+            requestAnimationFrame(draw);
+        }
+
         // EVENTS
+
+        function handleOrientation(event) {
+            if (window.innerWidth > window.innerHeight) {
+                if (event.beta < -8) {
+                    leftKeyDown = true
+                } else if (event.beta > 8) {
+                    rightKeyDown = true
+                } else {
+                    leftKeyDown = false
+                    rightKeyDown = false
+                }
+            } else {    
+                if (event.gamma < -8) {
+                    leftKeyDown = true
+                } else if (event.gamma > 8) {
+                    rightKeyDown = true
+                } else {
+                    leftKeyDown = false
+                    rightKeyDown = false
+                }
+            }
+        };
 
         function permission () {
             if (typeof(DeviceOrientationEvent) !== "undefined" && typeof(DeviceOrientationEvent.requestPermission) === "function" ) {
@@ -70,6 +116,33 @@
         document.getElementById("request").addEventListener("click", permission);
 
         // INIT VALUES
+
+        class Line {
+            constructor(x1, y1, x2, y2) {     
+                this.x1 = x1;
+                this.y1 = y1;
+                this.x2 = x2;
+                this.y2 = y2;
+            }
+        }
+
+        function generateLines() {
+            for (i = 0; i <= ctx.canvas.width * 0.9; i += ctx.canvas.width * 0.1) {
+                for (j = 0; j <= ctx.canvas.height * 0.9; j += ctx.canvas.width * 0.1) {
+                    lines.push(new Line(i, j, i + ctx.canvas.width * 0.1, j + ctx.canvas.height * 0.1))
+                }
+            }
+        }
+
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight * 0.8;
+
+        var lines = []
+
+        generateLines()
 
     </script>
 </body>
