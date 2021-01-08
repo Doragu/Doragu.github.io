@@ -145,7 +145,8 @@
 
         function checkIfDoesNotCover(newX, newY) {
             for (i = 0; i < lines.length; i++) {
-                if ((lines[i].x1 == newX && lines[i].y1 == newY) || ((lines[i].x2 == newX && lines[i].y2 == newY))) {
+                // if ((lines[i].x1 == newX && lines[i].y1 == newY) || ((lines[i].x2 == newX && lines[i].y2 == newY))) {
+                if (lines[i].x2 == newX && lines[i].y2 == newY) {
                     return false;
                 }
             }
@@ -166,38 +167,55 @@
             // lines.push(new Line(100, 100, 200, 100));
 
             while (numberOfLines < 100) {
+
+                // directions = ["up", "left", "right", "down"];
+
                 switch (direction) {
                     case "up":
                         if (checkIfDoesNotCover(i, j - heightOfLine) && j >= 0) {
                             lines.push(new Line(i, j, i, j - heightOfLine));
                             j = j - heightOfLine;
+                            console.log(direction);
+                            numberOfLines += 1;
                             break;
                         }
                     case "down":
                         if (checkIfDoesNotCover(i, j + heightOfLine) && j <= ctx.canvas.height) {
                             lines.push(new Line(i, j, i, j + heightOfLine));
-                            j = j + heightOfLine
+                            j = j + heightOfLine;
+                            console.log(direction);
+                            numberOfLines += 1;
                             break;
                         }
                     case "right":
                         if (checkIfDoesNotCover(i + widthOfLine, j) && i <= ctx.canvas.width) {
                             lines.push(new Line(i, j, i + widthOfLine, j));
                             i = i + widthOfLine;
+                            console.log(direction);
+                            numberOfLines += 1;
                             break;
                         }
                     case "left":
                         if (checkIfDoesNotCover(i - widthOfLine, j) && i >= 0) {
                             lines.push(new Line(i, j, i - widthOfLine, j));
                             i = i - widthOfLine;
+                            console.log(direction);
+                            numberOfLines += 1;
                             break;
                         }
                     default:
+                        i += widthOfLine;
+                        j += heightOfLine;
+                        console.log("aa");
                         break;
                 }
 
-                console.log(direction);
+                if (numberOfLines % 10 == 0) {
+                    i += widthOfLine;
+                    j += heightOfLine;
+                }
+
                 direction = randomizeNextDirection();
-                numberOfLines += 1;
             }
         }
 
