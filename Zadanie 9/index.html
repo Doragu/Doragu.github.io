@@ -147,8 +147,8 @@
         function generateLines() {
             var direction = "down";
             
-            var widthOfLine = ctx.canvas.width * 0.1;
-            var heightOfLine = ctx.canvas.height * 0.1;
+            widthOfLine = ctx.canvas.width * 0.1;
+            heightOfLine = ctx.canvas.height * 0.1;
             var allFilled = false;
             var i = widthOfLine;
             var j = 0;
@@ -211,17 +211,114 @@
             console.log("map generated");
         }
 
+        function checkIfCrossesAnyLine(item, startX, startY, endX, endY) {
+            
+            for (i = 0; i < lines.length; i++) {
+                
+                if (lines[i].x1 > lines[i].x2) {
+                    var temp = lines[i].x1;
+                    lines[i].x1 = lines[i].x2;
+                    lines[i].x2 = temp; 
+                } 
+                if (lines[i].y1 < lines[i].y2) {
+                    var temp = lines[i].y1;
+                    lines[i].y1 = lines[i].y2;
+                    lines[i].y2 = temp; 
+                }
+
+                if (item == "up" && lines[i].x1 < startX && lines[i].x2 > startX && lines[i].y1 > startY && lines[i].y1 < endY) {
+                    return i;
+                } else if (item == "down" && lines[i].x1 < startX && lines[i].x2 > startX && lines[i].y1 < startY && lines[i].y1 > endY) {
+                    return i;
+                } else if (item == "left" && lines[i].x1 < startX && lines[i].x1 > endX && lines[i].y1 > startY && lines[i].y2 < startY) {
+                    return i;
+                } else if (item == "right" && lines[i].x1 > startX && lines[i].x1 < endX && lines[i].y1 > startY && lines[i].y2 < startY) {
+                    return i;
+                } 
+                // console.log(i)
+            }
+
+            return -1;
+        }
+
+        function generatePath() {
+            var startX = ctx.canvas.width * 0.05;
+            var startY = ctx.canvas.height * 0.95;
+
+            ballX = startX;
+            ballY = startY;
+            if (widthOfLine >= heightOfLine) {
+                ballSize = heightOfLine * 0.4;
+            } else {
+                ballSize = widthOfLine * 0.4;
+            }
+            
+
+            var directions = ["up", "right", "left", "up", "right", "right", "down", "right", "right", "up", "up", "up", "up", "left", "down", "left", "up", "up", "up", "up", "right",
+                "right", "right", "up", "down", "right", "right", "down", "down", "left", "down", "down", "right", "right", "right", "up", "up", "up", "left", "up", "up", "right", "up"];
+            var endX = startX;
+            var endY = startY;
+
+            directions.forEach(function(item, index, array) {
+                switch (item) {
+                    case "up":
+                        endY = startY + heightOfLine;
+                        break;
+                    case "down":
+                        endY = startY - heightOfLine;
+                        break;
+                    case "left":
+                        endX = startX - widthOfLine;
+                        break;
+                    case "right":
+                        endX = startX + widthOfLine;
+                        break;
+                    default:
+                        break;
+                }
+
+                var lineIndex = checkIfCrossesAnyLine(item, startX, startY, endX, endY);
+                
+                if (lineIndex > -1) {
+                    lines.splice(lineIndex, 1);
+                    console.log("removed line")
+                }
+
+                startX = endX;
+                startY = endY;
+            });
+
+            ctx.beginPath();
+            ctx.fillStyle = "red";
+            ctx.arc(startX, startY, ballSize, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+            
+
+            console.log("path generated")
+        }
+
+
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
 
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight * 0.8;
 
-        var lines = []
+        var widthOfLine = 0;
+        var heightOfLine = 0;
 
-        generateLines()
+        var ballX = 0;
+        var ballY = 0;
+        var ballSize = 0;
+
+        var lines = [];
+
+        generateLines();
+        generatePath();
 
     </script>
 </body>
 
 </html>
+<!-- DOPISAĆ GENEROWANIE ŚCIEŻKI USUWAJĄCEJ NIEPOTRZEBNE LINIE -->
