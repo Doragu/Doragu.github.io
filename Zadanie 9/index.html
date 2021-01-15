@@ -66,15 +66,48 @@
             });
         }
 
-        function checkIfTouchesAnyLine() {
+        function checkIfTouchesAnyLine(x, y, stepDown, stepRight) {
             for (i = 0; i < lines.length; i++) {
+                if (stepDown > 0) { // down
+                    if (lines[i].x1 == lines[i].x2) {
+                        continue;
+                    }
 
+                    if (x < lines[i].x1 && x > lines[i].x2 && y + ballSize < lines[i].y1 && y + ballSize + stepDown > lines[i].y1) {
+                        return true;
+                    }
+                } else if (stepDown < 0) { // up
+                    if (lines[i].x1 == lines[i].x2) {
+                        continue;
+                    }
+
+                    if (x < lines[i].x1 && x > lines[i].x2 && y + ballSize > lines[i].y1 && y + ballSize - stepDown < lines[i].y1) {
+                        return true;
+                    }
+                } else if (stepRight > 0) { // right
+                    if (lines[i].y1 == lines[i].y2) {
+                        continue;
+                    }
+
+                    if (y < lines[i].y1 && y > lines[i].y2 && x + ballSize < lines[i].x1 && x + ballSize + stepRight > lines[i].x1) {
+                        return true;
+                    }
+                } else if (stepRight < 0) { // left
+                    if (lines[i].y1 == lines[i].y2) {
+                        continue;
+                    }
+
+                    if (y < lines[i].y1 && y > lines[i].y2 && x + ballSize > lines[i].x1 && x + ballSize - stepRight < lines[i].x1) {
+                        return true;
+                    }
+                }
             }
+
             return false;
         }
 
         function moveAndDrawBall(stepX, stepY) {
-            if (!checkIfTouchesAnyLine(ballX + stepX, ballY + stepY)) {
+            if (!checkIfTouchesAnyLine(ballX, ballY, stepX, stepY)) {
                 ballX += stepX;
                 ballY += stepY;
             }
