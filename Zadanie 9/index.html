@@ -104,6 +104,8 @@
                     if (y < lines[i].y1 && y > lines[i].y2 && x + ballSize > lines[i].x1 && x + ballSize + stepRight < lines[i].x1) {
                         return true;
                     }
+                } else if (getDistanceBetweenPoints(x, lines[i].x1, y, lines[i].y1) < ballSize || getDistanceBetweenPoints(x, lines[i].x2, y, lines[i].y2) < ballSize) {
+                    return false;
                 }
             }
 
@@ -131,8 +133,12 @@
             ctx.stroke();
         }
 
+        function getDistanceBetweenPoints(x1, x2, y1, y2) {
+            return Math.sqrt(Math.pow(ballX - finishX) + Math.pow(ballY - finishY))
+        }
+
         function checkIfFinished() {
-            if (Math.sqrt(Math.pow(ballX - finishX) + Math.pow(ballY - finishY)) <= ballSize) {
+            if (getDistanceBetweenPoints(ballX, finishX, ballY, finishY) <= ballSize) {
                 return true;
             }
 
@@ -368,9 +374,9 @@
             ballX = startX;
             ballY = startY;
             if (widthOfLine >= heightOfLine) {
-                ballSize = heightOfLine * 0.4;
+                ballSize = heightOfLine * 0.3;
             } else {
-                ballSize = widthOfLine * 0.4;
+                ballSize = widthOfLine * 0.3;
             }
             
 
