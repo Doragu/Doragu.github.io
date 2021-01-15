@@ -66,9 +66,18 @@
             });
         }
 
+        function checkIfTouchesAnyLine() {
+            for (i = 0; i < lines.length; i++) {
+
+            }
+            return false;
+        }
+
         function moveAndDrawBall(stepX, stepY) {
-            ballX += stepX;
-            ballY += stepY;
+            if (!checkIfTouchesAnyLine(ballX + stepX, ballY + stepY)) {
+                ballX += stepX;
+                ballY += stepY;
+            }
 
             ctx.beginPath();
             ctx.fillStyle = "red";
@@ -135,9 +144,9 @@
                     leftKeyDown = true
                 } else if (event.gamma > 8) {
                     rightKeyDown = true
-                } else if (event.beta < 8) {
+                } else if (event.beta > 8) {
                     upKeyDown = true
-                } else if (event.beta > -8) {
+                } else if (event.beta < -8) {
                     downKeyDown = true
                 } else {
                     upKeyDown = false;
