@@ -69,7 +69,7 @@
         function checkIfTouchesAnyLine(x, y, stepDown, stepRight) {
             for (i = 0; i < lines.length; i++) {
                 if (stepDown > 0) { // down
-                    if (lines[i].x1 == lines[i].x2) {
+                    if (lines[i].y1 == lines[i].y2) {
                         continue;
                     }
 
@@ -77,7 +77,7 @@
                         return true;
                     }
                 } else if (stepDown < 0) { // up
-                    if (lines[i].x1 == lines[i].x2) {
+                    if (lines[i].y1 == lines[i].y2) {
                         continue;
                     }
 
@@ -85,7 +85,7 @@
                         return true;
                     }
                 } else if (stepRight > 0) { // right
-                    if (lines[i].y1 == lines[i].y2) {
+                    if (lines[i].x1 == lines[i].x2) {
                         continue;
                     }
 
@@ -93,7 +93,7 @@
                         return true;
                     }
                 } else if (stepRight < 0) { // left
-                    if (lines[i].y1 == lines[i].y2) {
+                    if (lines[i].x1 == lines[i].x2) {
                         continue;
                     }
 
