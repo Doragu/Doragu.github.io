@@ -255,17 +255,17 @@
             
 
             var directions = ["up", "right", "left", "up", "right", "right", "down", "right", "right", "up", "up", "up", "up", "left", "down", "left", "up", "up", "up", "up", "right",
-                "right", "right", "up", "down", "right", "right", "down", "down", "left", "down", "down", "right", "right", "right", "up", "up", "up", "left", "up", "up", "right", "up"];
+                "right", "right", "up", "down", "right", "right", "down", "down", "left", "down", "down", "right", "right", "right", "up", "up", "up", "left", "up", "up", "right"];
             var endX = startX;
             var endY = startY;
 
             directions.forEach(function(item, index, array) {
                 switch (item) {
                     case "up":
-                        endY = startY + heightOfLine;
+                        endY = startY - heightOfLine;
                         break;
                     case "down":
-                        endY = startY - heightOfLine;
+                        endY = startY + heightOfLine;
                         break;
                     case "left":
                         endX = startX - widthOfLine;
@@ -287,13 +287,6 @@
                 startX = endX;
                 startY = endY;
             });
-
-            ctx.beginPath();
-            ctx.fillStyle = "red";
-            ctx.arc(startX, startY, ballSize, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.stroke();
-            
 
             console.log("path generated")
         }
