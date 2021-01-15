@@ -134,7 +134,7 @@
         }
 
         function getDistanceBetweenPoints(x1, x2, y1, y2) {
-            return Math.sqrt(Math.pow(ballX - finishX) + Math.pow(ballY - finishY))
+            return Math.sqrt(Math.pow(ballX - finishX, 2) + Math.pow(ballY - finishY, 2))
         }
 
         function checkIfFinished() {
@@ -360,8 +360,6 @@
                 } else if (item == "right" && lines[i].x1 > startX && lines[i].x1 < endX && lines[i].y1 > startY && lines[i].y2 < startY) {
                     linesToRemove.push(i);
                 } 
-
-                // console.log(i)
             }
 
             return linesToRemove;
