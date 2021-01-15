@@ -66,10 +66,14 @@
             });
         }
 
-        function checkIfTouchesAnyLine(x, y, stepDown, stepRight) {
+        function checkIfTouchesAnyLine(x, y, stepRight, stepDown) {
+            if (stepRight == 0 && stepDown == 0) {
+                return false;
+            }
+
             for (i = 0; i < lines.length; i++) {
                 if (stepDown > 0) { // down
-                    if (lines[i].y1 == lines[i].y2) {
+                    if (lines[i].y1 != lines[i].y2) {
                         continue;
                     }
 
@@ -77,15 +81,16 @@
                         return true;
                     }
                 } else if (stepDown < 0) { // up
-                    if (lines[i].y1 == lines[i].y2) {
+                    if (lines[i].y1 != lines[i].y2) {
                         continue;
                     }
 
-                    if (x < lines[i].x1 && x > lines[i].x2 && y + ballSize > lines[i].y1 && y + ballSize - stepDown < lines[i].y1) {
+                    if (x > lines[i].x1 && x < lines[i].x2 && y - ballSize > lines[i].y1 && y - ballSize + stepDown < lines[i].y1) {
+                        console.log("aa")
                         return true;
                     }
                 } else if (stepRight > 0) { // right
-                    if (lines[i].x1 == lines[i].x2) {
+                    if (lines[i].x1 != lines[i].x2) {
                         continue;
                     }
 
@@ -93,11 +98,11 @@
                         return true;
                     }
                 } else if (stepRight < 0) { // left
-                    if (lines[i].x1 == lines[i].x2) {
+                    if (lines[i].x1 != lines[i].x2) {
                         continue;
                     }
 
-                    if (y < lines[i].y1 && y > lines[i].y2 && x + ballSize > lines[i].x1 && x + ballSize - stepRight < lines[i].x1) {
+                    if (y < lines[i].y1 && y > lines[i].y2 && x + ballSize > lines[i].x1 && x + ballSize + stepRight < lines[i].x1) {
                         return true;
                     }
                 }
@@ -167,7 +172,7 @@
                 } else if (event.gamma < -8) {
                     downKeyDown = true
                 } else {
-                    upKeyDown = false;
+                    // upKeyDown = false;
                     downKeyDown = false;
                     leftKeyDown = false
                     rightKeyDown = false
@@ -182,7 +187,7 @@
                 } else if (event.beta < -8) {
                     upKeyDown = true
                 } else {
-                    upKeyDown = false;
+                    // upKeyDown = false;
                     downKeyDown = false;
                     leftKeyDown = false
                     rightKeyDown = false
@@ -401,7 +406,7 @@
         var leftKeyDown = false;
         var rightKeyDown = false;
         var downKeyDown = false;
-        var upKeyDown = false;
+        var upKeyDown = true;
 
         var widthOfLine = 0;
         var heightOfLine = 0;
