@@ -42,7 +42,7 @@
 <body class="disable-dbl-tap-zoom">
     <canvas id="canvas"></canvas><br>
     <div id="buttons">
-        <button id="request" type="button">Start Game</button> 
+        <button id="request" type="button" disabled>Start Game</button> 
     </div>
     <script>
 
@@ -66,9 +66,48 @@
             });
         }
 
+        function moveAndDrawBall(stepX, stepY) {
+            // ballX += stepX;
+            // ballY += stepY;
+
+            ctx.beginPath();
+            ctx.fillStyle = "red";
+            ctx.arc(ballX, ballY, ballSize, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        function drawFinish() {
+            ctx.beginPath();
+            ctx.fillStyle = "black";
+            ctx.arc(finishX, finishY, ballSize, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+        }
+
         function draw() {
             drawBoard();
+            moveAndDrawBall(0, 0);
             drawMaze();
+            drawFinish();
+
+            if (leftKeyDown) {
+                if (ballX - ballSize > 0) {
+                    moveAndDrawBall(-step, 0); 
+                }
+            } else if (rightKeyDown) {
+                if (ballX < (ctx.canvas.height - ballSize)) {
+                    moveAndDrawBall(step, 0);
+                }
+            } else if (upKeyDown) {
+                if (ballY - ballSize > 0) {
+                    moveAndDrawBall(0, -step);
+                }
+            } else if (downKeyDown) {
+                if (ballY < (ctx.canvas.height - ballSize)) {
+                    moveAndDrawBall(0, step);
+                }
+            }
 
             requestAnimationFrame(draw);
         }
@@ -76,21 +115,33 @@
         // EVENTS
 
         function handleOrientation(event) {
-            if (window.innerWidth > window.innerHeight) {
+            if (window.innerWidth > window.innerHeight) { // poziomo
                 if (event.beta < -8) {
                     leftKeyDown = true
                 } else if (event.beta > 8) {
                     rightKeyDown = true
+                } else if (event.gamma > 8) {
+                    upKeyDown = true
+                } else if (event.gamma < -8) {
+                    downKeyDown = true
                 } else {
+                    upKeyDown = false;
+                    downKeyDown = false;
                     leftKeyDown = false
                     rightKeyDown = false
                 }
-            } else {    
+            } else { // pionowo
                 if (event.gamma < -8) {
                     leftKeyDown = true
                 } else if (event.gamma > 8) {
                     rightKeyDown = true
+                } else if (event.beta > 8) {
+                    upKeyDown = true
+                } else if (event.beta < -8) {
+                    downKeyDown = true
                 } else {
+                    upKeyDown = false;
+                    downKeyDown = false;
                     leftKeyDown = false
                     rightKeyDown = false
                 }
@@ -288,6 +339,9 @@
                 startY = endY;
             });
 
+            finishX = startX;
+            finishY = startY;
+        
             console.log("path generated")
         }
 
@@ -298,6 +352,11 @@
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight * 0.8;
 
+        var leftKeyDown = false;
+        var rightKeyDown = false;
+        var downKeyDown = false;
+        var upKeyDown = false;
+
         var widthOfLine = 0;
         var heightOfLine = 0;
 
@@ -305,10 +364,16 @@
         var ballY = 0;
         var ballSize = 0;
 
+        var finishX = 0;
+        var finishY = 0;
+        var step = 10;
+
         var lines = [];
 
         generateLines();
         generatePath();
+
+        document.getElementById("request").disabled = false;
 
     </script>
 </body>
