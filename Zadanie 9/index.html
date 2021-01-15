@@ -96,7 +96,7 @@
                     moveAndDrawBall(-step, 0); 
                 }
             } else if (rightKeyDown) {
-                if (ballX < (ctx.canvas.height - ballSize)) {
+                if (ballX < (ctx.canvas.width - ballSize)) {
                     moveAndDrawBall(step, 0);
                 }
             } else if (upKeyDown) {
@@ -135,9 +135,9 @@
                     leftKeyDown = true
                 } else if (event.gamma > 8) {
                     rightKeyDown = true
-                } else if (event.beta > 8) {
+                } else if (event.beta < 8) {
                     upKeyDown = true
-                } else if (event.beta < -8) {
+                } else if (event.beta > -8) {
                     downKeyDown = true
                 } else {
                     upKeyDown = false;
