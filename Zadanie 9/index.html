@@ -86,7 +86,6 @@
                     }
 
                     if (x > lines[i].x1 && x < lines[i].x2 && y - ballSize > lines[i].y1 && y - ballSize + stepDown < lines[i].y1) {
-                        console.log("aa")
                         return true;
                     }
                 } else if (stepRight > 0) { // right
@@ -132,11 +131,32 @@
             ctx.stroke();
         }
 
+        function checkIfFinished() {
+            if (Math.sqrt(Math.pow(ballX - finishX) + Math.pow(ballY - finishY)) <= ballSize) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function drawEndGame() {
+            ctx.beginPath();
+            ctx.font = "18px Arial";
+            ctx.fillStyle = "black" 
+            ctx.fillText("Wygrałeś", (ctx.canvas.width / 2) - 50, ctx.canvas.height / 2);
+            ctx.stroke();
+        }
+
         function draw() {
             drawBoard();
             moveAndDrawBall(0, 0);
             drawMaze();
             drawFinish();
+
+            if (checkIfFinished()) {
+                drawEndGame();
+                return
+            }
 
             if (leftKeyDown) {
                 if (ballX - ballSize > 0) {
@@ -172,7 +192,7 @@
                 } else if (event.gamma < -8) {
                     downKeyDown = true
                 } else {
-                    // upKeyDown = false;
+                    upKeyDown = false;
                     downKeyDown = false;
                     leftKeyDown = false
                     rightKeyDown = false
@@ -187,7 +207,7 @@
                 } else if (event.beta < -8) {
                     upKeyDown = true
                 } else {
-                    // upKeyDown = false;
+                    upKeyDown = false;
                     downKeyDown = false;
                     leftKeyDown = false
                     rightKeyDown = false
@@ -406,7 +426,7 @@
         var leftKeyDown = false;
         var rightKeyDown = false;
         var downKeyDown = false;
-        var upKeyDown = true;
+        var upKeyDown = false;
 
         var widthOfLine = 0;
         var heightOfLine = 0;
@@ -417,7 +437,7 @@
 
         var finishX = 0;
         var finishY = 0;
-        var step = 10;
+        var step = 5;
 
         var lines = [];
 
